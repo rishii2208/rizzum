@@ -1,0 +1,19 @@
+{
+  "name": "resume-editor",
+  "private": true,
+  "version": "0.1.0",
+  "description": "AI-powered LaTeX resume optimizer with live PDF preview",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace server\" \"npm run dev --workspace client\"",
+    "build": "npm run build --workspace server && npm run build --workspace client",
+    "start": "npm run start --workspace server",
+    "test": "npm run test --workspace server"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
