@@ -12,35 +12,165 @@ const DEFAULT_JD = `We need a Senior Software Engineer to build AI-powered devel
 Must have: React, TypeScript, Node.js, cloud (GCP/AWS) experience, and experience working with LLM APIs.
 Nice to have: TailwindCSS, PDF generation, ATS integrations.`;
 
-const DEFAULT_RESUME = `\\documentclass[11pt]{article}
-\\usepackage{geometry}
-\\geometry{margin=1in}
-\\begin{document}
-\\begin{center}
-  {\\LARGE Jane Doe} \\\\ 
-  {Software Engineer \\ jane@example.com \\ github.com/janedoe}
-\\end{center}
+const DEFAULT_RESUME = `\documentclass[letterpaper,11pt]{article}
 
-\\section*{Summary}
-Product-minded engineer with 6+ years building delightful SaaS products and leading cross-functional initiatives.
+\\usepackage{latexsym}
+\\usepackage[empty]{fullpage}
+\\usepackage{titlesec}
+\\usepackage{marvosym}
+\\usepackage[usenames,dvipsnames]{xcolor}
+\\usepackage{enumitem}
+\\usepackage[hidelinks]{hyperref}
+\\usepackage{fancyhdr}
+\\usepackage[english]{babel}
+\\usepackage{tabularx}
 
-\\section*{Experience}
-\\textbf{Lead Frontend Engineer} \\ Acme Corp \\ 2021--Present\\\\
-\\begin{itemize}
-  \\item Shipped React/TypeScript design system adopted by 8 teams and cut UI defects by 35%.
-  \\item Drove performance optimizations that reduced bundle size by 28%.
-  \\item Partnered with product to launch AI-assisted authoring features, lifting activation 12%.
-\\end{itemize}
+\\pagestyle{fancy}
+\\fancyhf{}
+\\fancyfoot{}
+\\renewcommand{\headrulewidth}{0pt}
+\\renewcommand{\footrulewidth}{0pt}
 
-\\textbf{Software Engineer} \\ Northwind \\ 2018--2021\\\\
-\\begin{itemize}
-  \\item Built Node.js microservices powering analytics pipeline handling 2B events/day.
-  \\item Mentored 4 engineers and instituted automated testing with 85% coverage.
-\\end{itemize}
+\\addtolength{\\oddsidemargin}{-0.5in}
+\\addtolength{\\evensidemargin}{-0.5in}
+\\addtolength{\\textwidth}{1in}
+\\addtolength{\\topmargin}{-0.5in}
+\\addtolength{\\textheight}{1.0in}
 
-\\section*{Skills}
-React \\ TypeScript \\ Node.js \\ GraphQL \\ GCP \\ AWS \\ TailwindCSS \\ Jest
-\\end{document}`;
+\\urlstyle{same}
+
+\\raggedbottom
+\\raggedright
+\\setlength{\\tabcolsep}{0in}
+
+\\titleformat{\\section}{
+  \\vspace{-4pt}\\scshape\\raggedright\\large
+}{}{0em}{}[\\color{black}\\titlerule \\vspace{-5pt}]
+\\newcommand{\\resumeItem}[1]{
+  \\item\\small{
+    {#1 \\vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\newcommand{\whitetext}[1]{{\fontsize{1pt}{1pt}\selectfont\textcolor{white}{#1}}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{center}
+    \textbf{\Huge \scshape Rishi Raj Prajapati} \\ \vspace{1pt}
+    \small 870-016-8283 $|$ 
+    \\href{mailto:rishirajprajapati22@gmail.com}{\\underline{rishirajprajapati22@gmail.com}} $|$ 
+    \\href{https://www.linkedin.com/in/rishi-raj-prajapati/}{\\underline{linkedin.com/in/rishi-raj-prajapati/}} $|$
+    \\href{https://www.github.com/rishii2208}{\\underline{github.com/rishii2208}}
+\end{center}
+
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Delhi Technological University}{Delhi, IN}
+      {BTech, Majors in ECE, Minors in AI-ML}{Aug 2022 -- May 2026}
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {AOC}{May 2025 -- Jul 2025}
+      {Software Development Intern}{Noida, Onsite}
+      \resumeItemListStart
+        \resumeItem{Engineered and optimized RESTful APIs using FastAPI and PostgreSQL, achieving an average 120ms latency under high-concurrency workloads for real-time applications.}
+        \resumeItem{Developed scalable authentication and data management pipelines with robust schema migrations and token-based security, utilizing asynchronous I/O to improve system throughput and reliability.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Zebpay}{Mar 2024 -- Aug 2024}
+      {Software Development Intern}{Mumbai, IN}
+      \resumeItemListStart
+        \resumeItem{Designed and deployed a real-time crypto price prediction API using XGBoost and LSTM models on historical trading data, achieving 92\% predictive accuracy across major tokens with low-latency inference at scale.}
+        \resumeItem{Collaborated with a cross-functional full-stack team to integrate and deploy new features on a high-traffic platform serving 5M+ active users, working within large-scale production codebases.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{MindMapper} $|$ \emph{JavaScript, FastAPI, Python, Docker, OpenAI Embeddings, ChromaDB}}{\href{https://github.com/rishii2208/AIMindMapper}{Link}}
+          \resumeItemListStart
+            \resumeItem{Developed MindMapper, an AI-powered tool using React.js and FastAPI to transform multi-format data into interactive, branching mind maps for enhanced knowledge representation.}
+            \resumeItem{Implemented a unique sideways, depth-first conversational flow with dynamic node creation and cross-referencing, moving beyond typical top-down LLM interactions.}
+            \resumeItem{Leveraged OpenAI embeddings with ChromaDB for semantic chunking and vector search, enabling intelligent linking of insights across diverse data sources.}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
+          {\textbf{Slander} $|$ \emph{JavaScript, WebRTC, AI, Algorithms}}{\href{http://slander.live}{Link}}
+          \resumeItemListStart
+            \resumeItem{Engineered Slander, a P2P real-time video chat platform featuring user verification, AI-based abuse detection, and matchmaking algorithms to enhance user experience and safety.}
+            \resumeItem{Achieved ultra-low-latency live video streaming (200ms delay) and a smooth user experience through advanced WebRTC optimizations.}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+%-----------PROGRAMMING SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Programming Languages}{: Python, JavaScript, SQL, TypeScript} \\
+     \textbf{AI/ML}{: XGBoost, LSTM, OpenAI Embeddings, Prompt Engineering, Scikit-learn} \\
+     \textbf{Web/Backend}{: FastAPI, React.js, RESTful APIs, Node.js} \\
+     \textbf{Databases/Tools}{: PostgreSQL, Redis, ChromaDB, Git, GitHub} \\
+     \textbf{DevOps/Cloud}{: Docker, Kubernetes, CI/CD, AWS (EC2, S3), Google Cloud Platform (GCP)} \\
+     \textbf{Core CS}{: Data Structures \& Algorithms, Object-Oriented Programming (OOP), Operating Systems, DBMS}
+    }}
+ \end{itemize}
+
+%-----------ACHIEVEMENTS-----------
+\section{Achievements}
+\resumeItemListStart
+    \resumeItem{Excelled in Data Structures and Algorithms by solving 300+ LeetCode problems, achieving a rating of 1570, demonstrating strong problem-solving skills.}
+    \resumeItem{Served as Coordinator and Secretary of Invictus DTU, mentoring 200+ students and orchestrating 3 national-level hackathons and numerous technical events and conferences.}
+    \resumeItem{Secured victories in 3 national-level hackathons (5000+ registrations) and 7 additional competitions (500+ participants), showcasing strong development background and collaborative skills.}
+\resumeItemListEnd
+
+\whitetext{Data Structures, Algorithms, Object-Oriented Programming (OOP), Operating Systems, Database Management Systems (DBMS), Computer Networks, Java, Python, C++, JavaScript, TypeScript, React, Node.js, Express.js, Spring Boot, Django, FastAPI, RESTful APIs, Microservices, SQL, MySQL, PostgreSQL, MongoDB, Redis, Git, GitHub, Linux/Unix, Docker, Kubernetes, AWS, Google Cloud (GCP), CI/CD, Jenkins, Unit Testing, JUnit, PyTest, Agile/Scrum, System Design (Basics), Design Patterns, SOLID Principles, Concurrency/Multithreading, Message Queues (Kafka), Caching, Problem-Solving, Competitive Programming, Hackathons, LeetCode, CodeChef, Codeforces, CGPA 8.0+}
+
+\end{document}
+`;
 
 const editorOptions = {
   fontSize: 14,

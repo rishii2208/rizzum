@@ -4,11 +4,11 @@ An AI-assisted resume tailoring tool that accepts a job description and LaTeX re
 
 ## Features
 
-- ✏️ Dual-pane editors for JD and LaTeX with Monaco Editor-powered UX.
-- 🤖 Backend Gemini integration (Gemini 1.5 Flash 8B by default) with structured prompting.
-- 📄 Real-time LaTeX → PDF compilation powered entirely by the local `tectonic` engine for Overleaf-quality output.
-- 📥 One-click PDF download of the optimized resume.
-- 📊 Heuristic ATS score for quick alignment feedback with JD keywords.
+- Dual-pane editors for JD and LaTeX with Monaco Editor-powered UX.
+- Backend Gemini integration (Gemini 1.5 Flash 8B by default) with structured prompting.
+- Real-time LaTeX → PDF compilation powered entirely by the local `tectonic` engine for Overleaf-quality output.
+- One-click PDF download of the optimized resume.
+- Heuristic ATS score for quick alignment feedback with JD keywords.
 
 ## Project layout
 
