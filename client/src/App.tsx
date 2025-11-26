@@ -292,26 +292,19 @@ function App() {
           Software Development • Gen AI • Product Engineering
         </div>
         <h1 className="text-center text-5xl font-black tracking-[0.25em] text-slate-900 sm:text-7xl">RIZZUM</h1>
-        <p className="mx-auto max-w-3xl text-center text-lg font-medium text-slate-700">
-          Software engineer building production ready systems, real-time platforms, and tools that ship fast but stay reliable.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4 text-base font-black uppercase tracking-wide">
-          <span className="rounded-2xl border-4 border-slate-900 bg-rose-300 px-6 py-3 shadow-[6px_6px_0_0_#0f172a]">Software Engineer</span>
-          <span className="rounded-2xl border-4 border-slate-900 bg-white px-6 py-3 shadow-[6px_6px_0_0_#0f172a]">Applied AI</span>
-          <span className="rounded-2xl border-4 border-slate-900 bg-emerald-300 px-6 py-3 shadow-[6px_6px_0_0_#0f172a]">Product Development</span>
-        </div>
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <ScoreBadge coverage={atsScore?.coverage} />
-          <button
-            onClick={handleOptimize}
-            disabled={isOptimizing}
-            className="flex items-center gap-2 rounded-full border-4 border-slate-900 bg-yellow-300 px-8 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isOptimizing ? "Optimizing…" : "Optimize Resume"}
-          </button>
-        </div>
-        {error && <p className="text-center text-sm font-semibold text-rose-500">{error}</p>}
       </header>
+
+      <section className="mx-auto mt-8 flex max-w-5xl flex-wrap items-center justify-center gap-4 px-6">
+        <ScoreBadge coverage={atsScore?.coverage} />
+        <button
+          onClick={handleOptimize}
+          disabled={isOptimizing}
+          className="flex items-center gap-2 rounded-full border-4 border-slate-900 bg-yellow-300 px-8 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isOptimizing ? "Optimizing…" : "Optimize Resume"}
+        </button>
+      </section>
+      {error && <p className="mt-3 text-center text-sm font-semibold text-rose-500">{error}</p>}
 
       <main className="mx-auto mt-12 grid max-w-6xl gap-6 px-6 lg:grid-cols-2">
         <div className="space-y-6">
