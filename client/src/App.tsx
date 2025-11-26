@@ -283,18 +283,6 @@ function App() {
 
   return (
     <div className="min-h-screen pb-16 text-slate-900">
-      <section className="mx-auto mt-8 flex max-w-5xl flex-wrap items-center justify-center gap-4 px-6">
-        <ScoreBadge coverage={atsScore?.coverage} />
-        <button
-          onClick={handleOptimize}
-          disabled={isOptimizing}
-          className="flex items-center gap-2 rounded-full border-4 border-slate-900 bg-yellow-300 px-8 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isOptimizing ? "Optimizing…" : "Optimize Resume"}
-        </button>
-      </section>
-      {error && <p className="mt-3 text-center text-sm font-semibold text-rose-500">{error}</p>}
-
       <main className="mx-auto mt-10 flex max-w-6xl flex-col gap-6 px-6 lg:flex-row">
         <div className="flex w-full flex-col gap-6 lg:w-2/3">
           <Panel title="Job Description">
@@ -332,53 +320,40 @@ function App() {
               </div>
             </Panel>
           </div>
-
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            {atsScore && (
-              <Panel title="ATS Insights">
-                <div className="space-y-4 text-sm text-slate-700">
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Top matched keywords</p>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {atsScore.matchedKeywords.map((keyword) => (
-                        <span
-                          key={keyword}
-                          className="rounded-full border-2 border-slate-900/40 bg-emerald-200 px-3 py-1 font-semibold text-slate-900"
-                        >
-                          {keyword}
-                        </span>
-                      ))}
-                      {!atsScore.matchedKeywords.length && <span className="text-slate-400">No matches yet</span>}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">High-priority gaps</p>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {atsScore.missingKeywords.map((keyword) => (
-                        <span
-                          key={keyword}
-                          className="rounded-full border-2 border-slate-900/40 bg-rose-200 px-3 py-1 font-semibold text-slate-900"
-                        >
-                          {keyword}
-                        </span>
-                      ))}
-                      {!atsScore.missingKeywords.length && <span className="text-slate-400">Fully covered!</span>}
-                    </div>
+          {atsScore && (
+            <Panel title="ATS Insights">
+              <div className="space-y-4 text-sm text-slate-700">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Top matched keywords</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {atsScore.matchedKeywords.map((keyword) => (
+                      <span
+                        key={keyword}
+                        className="rounded-full border-2 border-slate-900/40 bg-emerald-200 px-3 py-1 font-semibold text-slate-900"
+                      >
+                        {keyword}
+                      </span>
+                    ))}
+                    {!atsScore.matchedKeywords.length && <span className="text-slate-400">No matches yet</span>}
                   </div>
                 </div>
-              </Panel>
-            )}
-
-            <div className="flex flex-1 justify-end gap-4">
-              <button
-                onClick={handleDownload}
-                disabled={!pdfBase64 || isCompiling}
-                className="rounded-full border-4 border-slate-900 bg-white px-6 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                Download PDF
-              </button>
-            </div>
-          </div>
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">High-priority gaps</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {atsScore.missingKeywords.map((keyword) => (
+                      <span
+                        key={keyword}
+                        className="rounded-full border-2 border-slate-900/40 bg-rose-200 px-3 py-1 font-semibold text-slate-900"
+                      >
+                        {keyword}
+                      </span>
+                    ))}
+                    {!atsScore.missingKeywords.length && <span className="text-slate-400">Fully covered!</span>}
+                  </div>
+                </div>
+              </div>
+            </Panel>
+          )}
         </div>
 
         <div className="flex w-full flex-col gap-6 lg:w-1/3">
@@ -399,13 +374,17 @@ function App() {
             </div>
           </Panel>
 
-          <button
-            onClick={handleDownload}
-            disabled={!pdfBase64 || isCompiling}
-            className="rounded-full border-4 border-slate-900 bg-white px-6 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Download PDF
-          </button>
+          <div className="flex items-center justify-center gap-4">
+            <ScoreBadge coverage={atsScore?.coverage} />
+            <button
+              onClick={handleOptimize}
+              disabled={isOptimizing}
+              className="flex items-center gap-2 rounded-full border-4 border-slate-900 bg-yellow-300 px-8 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isOptimizing ? "Optimizing…" : "Optimize Resume"}
+            </button>
+          </div>
+          {error && <p className="text-center text-sm font-semibold text-rose-500">{error}</p>}
         </div>
       </main>
     </div>
