@@ -306,20 +306,22 @@ function App() {
       </section>
       {error && <p className="mt-3 text-center text-sm font-semibold text-rose-500">{error}</p>}
 
-      <main className="mx-auto mt-12 grid max-w-6xl gap-6 px-6 lg:grid-cols-2">
-        <div className="space-y-6">
+      <main className="mx-auto mt-10 grid max-w-6xl grid-cols-12 gap-5 px-6">
+        <div className="col-span-12 lg:col-span-4">
           <Panel title="Job Description">
             <textarea
-              className="h-48 w-full rounded-2xl border-4 border-slate-900/30 bg-slate-100 p-4 font-mono text-sm text-slate-900 outline-none transition focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+              className="h-40 w-full rounded-2xl border-4 border-slate-900/30 bg-slate-100 p-4 font-mono text-sm text-slate-900 outline-none transition focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-yellow-300"
               value={jd}
               onChange={(e) => setJd(e.target.value)}
             />
           </Panel>
+        </div>
 
+        <div className="col-span-12 lg:col-span-4">
           <Panel title="Original Resume LaTeX">
             <div className="rounded-[28px] border-4 border-slate-900 bg-white p-1 shadow-[6px_6px_0_0_#0f172a]">
               <Editor
-                height="420px"
+                height="320px"
                 defaultLanguage="latex"
                 theme="vs"
                 options={editorOptions}
@@ -328,40 +330,13 @@ function App() {
               />
             </div>
           </Panel>
-
-          <div className="flex justify-end">
-            <button
-              onClick={handleDownload}
-              disabled={!pdfBase64 || isCompiling}
-              className="flex items-center gap-2 rounded-full border-4 border-slate-900 bg-white px-8 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              Download PDF
-            </button>
-          </div>
         </div>
 
-        <div className="space-y-6">
-          <Panel
-            title="Live PDF Preview"
-            actions={
-              <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {isCompiling ? "Compiling…" : pdfBase64 ? "Up to date" : "Waiting for LaTeX"}
-              </span>
-            }
-          >
-            <div className="h-[420px] overflow-hidden rounded-[28px] border-4 border-slate-900 bg-slate-50 shadow-[6px_6px_0_0_#0f172a]">
-              {pdfDataUrl ? (
-                <iframe title="resume-preview" src={pdfDataUrl} className="h-full w-full" />
-              ) : (
-                <div className="flex h-full items-center justify-center text-slate-400">PDF preview pending</div>
-              )}
-            </div>
-          </Panel>
-
+        <div className="col-span-12 lg:col-span-4">
           <Panel title="Optimized LaTeX">
             <div className="rounded-[28px] border-4 border-slate-900 bg-white p-1 shadow-[6px_6px_0_0_#0f172a]">
               <Editor
-                height="360px"
+                height="320px"
                 defaultLanguage="latex"
                 theme="vs"
                 options={editorOptions}
@@ -370,8 +345,49 @@ function App() {
               />
             </div>
           </Panel>
+        </div>
 
-          {atsScore && (
+        <div className="col-span-12 lg:col-span-6">
+          <Panel
+            title="Live PDF Preview"
+            actions={
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                {isCompiling ? "Compiling…" : pdfBase64 ? "Up to date" : "Waiting for LaTeX"}
+              </span>
+            }
+          >
+            <div className="h-[360px] overflow-hidden rounded-[28px] border-4 border-slate-900 bg-slate-50 shadow-[6px_6px_0_0_#0f172a]">
+              {pdfDataUrl ? (
+                <iframe title="resume-preview" src={pdfDataUrl} className="h-full w-full" />
+              ) : (
+                <div className="flex h-full items-center justify-center text-slate-400">PDF preview pending</div>
+              )}
+            </div>
+          </Panel>
+        </div>
+
+        <div className="col-span-12 lg:col-span-3">
+          <Panel title="Quick Actions">
+            <div className="space-y-4">
+              <button
+                onClick={handleDownload}
+                disabled={!pdfBase64 || isCompiling}
+                className="w-full rounded-full border-4 border-slate-900 bg-white px-5 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Download PDF
+              </button>
+              <div className="rounded-2xl border-2 border-slate-900/30 bg-slate-50 px-4 py-3 text-xs font-semibold text-slate-600">
+                <p>Status: {isCompiling ? "Generating PDF" : pdfBase64 ? "Ready" : "Waiting"}</p>
+                <p className="mt-1 break-words text-[11px] text-slate-500">
+                  {error ?? "Optimize first, then download the compiled PDF."}
+                </p>
+              </div>
+            </div>
+          </Panel>
+        </div>
+
+        {atsScore && (
+          <div className="col-span-12 lg:col-span-3">
             <Panel title="ATS Insights">
               <div className="space-y-4 text-sm text-slate-700">
                 <div>
@@ -404,8 +420,8 @@ function App() {
                 </div>
               </div>
             </Panel>
-          )}
-        </div>
+          </div>
+        )}
       </main>
     </div>
   );
