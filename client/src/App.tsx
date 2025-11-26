@@ -196,9 +196,9 @@ const getErrorMessage = (err: unknown, fallback: string) => {
 type PanelProps = PropsWithChildren<{ title: string; actions?: ReactNode }>;
 
 const Panel = ({ title, children, actions }: PanelProps) => (
-  <section className="space-y-3 rounded-2xl border border-white/10 bg-slate-900/70 p-4 shadow-2xl shadow-pink/40">
+  <section className="space-y-4 rounded-[32px] border-4 border-slate-900 bg-white/90 p-5 shadow-[8px_8px_0_0_#0f172a]">
     <div className="flex items-center justify-between gap-3">
-      <h2 className="text-lg font-semibold text-white">{title}</h2>
+      <h2 className="text-lg font-black tracking-wide text-slate-900">{title}</h2>
       {actions}
     </div>
     {children}
@@ -282,37 +282,49 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 pb-12 text-slate-50">
-      <header className="space-y-3 border-b border-white/10 bg-slate-950/90 px-6 py-8 backdrop-blur">
-        <p className="text-sm uppercase tracking-[0.3em] text-white/50">Resume Editor</p>
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <h1 className="text-3xl font-bold text-white">Tailor your LaTeX resume with AI</h1>
-          <div className="flex items-center gap-3">
-            <ScoreBadge coverage={atsScore?.coverage} />
-            <button
-              onClick={handleOptimize}
-              disabled={isOptimizing}
-              className="flex items-center gap-2 rounded-full bg-white/10 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {isOptimizing ? "Optimizing…" : "Optimize Resume"}
-            </button>
-          </div>
+    <div className="min-h-screen pb-16 text-slate-900">
+      <header className="mx-auto flex max-w-6xl flex-col gap-8 px-6 pt-12">
+        <div className="flex items-center justify-between text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-slate-500">
+          <span>Resume Lab</span>
+          <span>Work Mode</span>
         </div>
-        {error && <p className="text-sm text-rose-400">{error}</p>}
+        <div className="mx-auto -rotate-2 rounded-full border-4 border-slate-900 bg-slate-900 px-6 py-2 text-xs font-black uppercase tracking-[0.4em] text-white shadow-[8px_8px_0_0_#06b6d4]">
+          Software Development • Gen AI • Product Engineering
+        </div>
+        <h1 className="text-center text-5xl font-black tracking-[0.25em] text-slate-900 sm:text-7xl">RIZZUM</h1>
+        <p className="mx-auto max-w-3xl text-center text-lg font-medium text-slate-700">
+          Software engineer building production ready systems, real-time platforms, and tools that ship fast but stay reliable.
+        </p>
+        <div className="flex flex-wrap justify-center gap-4 text-base font-black uppercase tracking-wide">
+          <span className="rounded-2xl border-4 border-slate-900 bg-rose-300 px-6 py-3 shadow-[6px_6px_0_0_#0f172a]">Software Engineer</span>
+          <span className="rounded-2xl border-4 border-slate-900 bg-white px-6 py-3 shadow-[6px_6px_0_0_#0f172a]">Applied AI</span>
+          <span className="rounded-2xl border-4 border-slate-900 bg-emerald-300 px-6 py-3 shadow-[6px_6px_0_0_#0f172a]">Product Development</span>
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <ScoreBadge coverage={atsScore?.coverage} />
+          <button
+            onClick={handleOptimize}
+            disabled={isOptimizing}
+            className="flex items-center gap-2 rounded-full border-4 border-slate-900 bg-yellow-300 px-8 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isOptimizing ? "Optimizing…" : "Optimize Resume"}
+          </button>
+        </div>
+        {error && <p className="text-center text-sm font-semibold text-rose-500">{error}</p>}
       </header>
 
-      <main className="grid gap-6 p-6 lg:grid-cols-2">
+      <main className="mx-auto mt-12 grid max-w-6xl gap-6 px-6 lg:grid-cols-2">
         <div className="space-y-6">
           <Panel title="Job Description">
             <textarea
-              className="h-48 w-full rounded-lg border border-white/10 bg-slate-900/80 p-3 font-mono text-sm text-slate-200 outline-none focus:border-orange-400"
+              className="h-48 w-full rounded-2xl border-4 border-slate-900/30 bg-slate-100 p-4 font-mono text-sm text-slate-900 outline-none transition focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-yellow-300"
               value={jd}
               onChange={(e) => setJd(e.target.value)}
             />
           </Panel>
 
           <Panel title="Original Resume LaTeX">
-            <div className="rounded-md bg-white p-1">
+            <div className="rounded-[28px] border-4 border-slate-900 bg-white p-1 shadow-[6px_6px_0_0_#0f172a]">
               <Editor
                 height="420px"
                 defaultLanguage="latex"
@@ -328,7 +340,7 @@ function App() {
             <button
               onClick={handleDownload}
               disabled={!pdfBase64 || isCompiling}
-              className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex items-center gap-2 rounded-full border-4 border-slate-900 bg-white px-8 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-40"
             >
               Download PDF
             </button>
@@ -339,22 +351,22 @@ function App() {
           <Panel
             title="Live PDF Preview"
             actions={
-              <span className="text-xs text-white/60">
+              <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                 {isCompiling ? "Compiling…" : pdfBase64 ? "Up to date" : "Waiting for LaTeX"}
               </span>
             }
           >
-            <div className="h-[420px] overflow-hidden rounded-xl border border-slate-700 bg-slate-900">
+            <div className="h-[420px] overflow-hidden rounded-[28px] border-4 border-slate-900 bg-slate-50 shadow-[6px_6px_0_0_#0f172a]">
               {pdfDataUrl ? (
                 <iframe title="resume-preview" src={pdfDataUrl} className="h-full w-full" />
               ) : (
-                <div className="flex h-full items-center justify-center text-white/40">PDF preview pending</div>
+                <div className="flex h-full items-center justify-center text-slate-400">PDF preview pending</div>
               )}
             </div>
           </Panel>
 
           <Panel title="Optimized LaTeX">
-            <div className="rounded-md bg-white p-1">
+            <div className="rounded-[28px] border-4 border-slate-900 bg-white p-1 shadow-[6px_6px_0_0_#0f172a]">
               <Editor
                 height="360px"
                 defaultLanguage="latex"
@@ -368,27 +380,33 @@ function App() {
 
           {atsScore && (
             <Panel title="ATS Insights">
-              <div className="space-y-4 text-sm text-white/80">
+              <div className="space-y-4 text-sm text-slate-700">
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-white/60">Top matched keywords</p>
+                  <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Top matched keywords</p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {atsScore.matchedKeywords.map((keyword) => (
-                      <span key={keyword} className="rounded-full bg-emerald-500/10 px-3 py-1 text-emerald-300">
+                      <span
+                        key={keyword}
+                        className="rounded-full border-2 border-slate-900/40 bg-emerald-200 px-3 py-1 font-semibold text-slate-900"
+                      >
                         {keyword}
                       </span>
                     ))}
-                    {!atsScore.matchedKeywords.length && <span className="text-white/40">No matches yet</span>}
+                    {!atsScore.matchedKeywords.length && <span className="text-slate-400">No matches yet</span>}
                   </div>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-white/60">High-priority gaps</p>
+                  <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">High-priority gaps</p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {atsScore.missingKeywords.map((keyword) => (
-                      <span key={keyword} className="rounded-full bg-rose-500/10 px-3 py-1 text-rose-300">
+                      <span
+                        key={keyword}
+                        className="rounded-full border-2 border-slate-900/40 bg-rose-200 px-3 py-1 font-semibold text-slate-900"
+                      >
                         {keyword}
                       </span>
                     ))}
-                    {!atsScore.missingKeywords.length && <span className="text-white/40">Fully covered!</span>}
+                    {!atsScore.missingKeywords.length && <span className="text-slate-400">Fully covered!</span>}
                   </div>
                 </div>
               </div>

@@ -3,14 +3,16 @@ type Props = {
 };
 
 const getTone = (coverage = 0) => {
-  if (coverage >= 80) return "text-emerald-400 bg-emerald-500/10 border-emerald-500/40";
-  if (coverage >= 50) return "text-amber-300 bg-amber-400/10 border-amber-400/40";
-  return "text-rose-300 bg-rose-400/10 border-rose-400/40";
+  if (coverage >= 80) return "bg-emerald-300";
+  if (coverage >= 50) return "bg-amber-300";
+  return "bg-rose-300";
 };
 
 export const ScoreBadge = ({ coverage = 0 }: Props) => (
-  <div className={`inline-flex items-center gap-2 rounded-full border px-4 py-1 text-sm font-medium ${getTone(coverage)}`}>
+  <div
+    className={`inline-flex items-center gap-3 rounded-full border-4 border-slate-900 px-5 py-2 text-sm font-black tracking-wide text-slate-900 shadow-[4px_4px_0_0_#0f172a] ${getTone(coverage)}`}
+  >
     <span>ATS Score</span>
-    <span className="text-lg font-semibold">{coverage}%</span>
+    <span className="text-xl">{coverage}%</span>
   </div>
 );
