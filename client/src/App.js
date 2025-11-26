@@ -123,8 +123,8 @@ function App() {
         link.click();
         URL.revokeObjectURL(url);
     };
-    return (<div className="min-h-screen bg-slate-950 pb-12 text-slate-50">
-      <header className="space-y-3 border-b border-white/10 bg-slate-950/90 px-6 py-8 backdrop-blur">
+    return (<div className="min-h-screen bg-slate-50 pb-12 text-slate-50">
+      <header className="space-y-3 border-b border-white/10 bg-slate-50/90 px-6 py-8 backdrop-blur">
         <p className="text-sm uppercase tracking-[0.3em] text-brand-200">Resume Editor</p>
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <h1 className="text-3xl font-bold text-white">Tailor your LaTeX resume with AI</h1>
@@ -141,7 +141,7 @@ function App() {
       <main className="grid gap-6 p-6 lg:grid-cols-2">
         <div className="space-y-6">
           <Panel title="Job Description">
-            <textarea className="h-48 w-full rounded-lg border border-white/10 bg-slate-950/50 p-3 font-mono text-sm text-white outline-none focus:border-brand-500" value={jd} onChange={(e) => setJd(e.target.value)}/>
+            <textarea className="h-48 w-full rounded-lg border border-white/10 bg-slate-50/50 p-3 font-mono text-sm text-white outline-none focus:border-brand-500" value={jd} onChange={(e) => setJd(e.target.value)}/>
           </Panel>
 
           <Panel title="Original Resume LaTeX">
