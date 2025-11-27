@@ -5,8 +5,8 @@ TEX_VERSION=0.15.0
 BUILD_TAG=20251006
 RELEASE_TAG=continuous
 ARCHIVE_CANDIDATES=(
-	"tectonic-${TEX_VERSION}+${BUILD_TAG}-x86_64-unknown-linux-gnu.tar.gz"
-	"tectonic-${TEX_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+	"tectonic-${TEX_VERSION}+${BUILD_TAG}-x86_64-unknown-linux-musl.tar.gz"
+	"tectonic-${TEX_VERSION}-x86_64-unknown-linux-musl.tar.gz"
 )
 
 mkdir -p bin tmp/tectonic-download
