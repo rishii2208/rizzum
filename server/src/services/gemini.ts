@@ -16,15 +16,15 @@ export class GeminiApiError extends Error {
   }
 }
 
-const buildPrompt = ({ jd, resume }: OptimizeRequestPayload) => `You are an software developer who will optimise resume contents as per JD given. You know AI, backend dvelopment, frontend development, databases, data structures and algorithms very well and have projects .
+const buildPrompt = ({ jd, resume }: OptimizeRequestPayload) => `You are an unemployed software developer who will optimise present resume contents as per JD given.Your goal is to make changes in resume(add or modify or remove words or sentences in resume) in a way that it scores 100% as per present Job description given, and rank top in the database of job applications in sites like workday, indeed etc. You know AI, backend dvelopment, frontend development, databases, data structures and algorithms very well and have projects.So, optimise resume as per JD resuirements. For example if a job has backend Development role remove irrelevant skills like AI or Data processing or Machine learning. make resume relevant to the JD.  Rewire JD keyowrds into resume whereever relevant to stay competitive and rank best in resumes database.
 
 Instructions:
-1. Read the job description (JD) and align the resume contents(skills, internship experience content) accordingly, add keywords in between to get max ATS score as per the JD.
-2. Preserve the original structure when possible
-3. Keep the output VALID LaTeX that can be compiled with pdflatex.
-4. Do not include any explanation outside of the LaTeX document.
-5. Add/ remove skills as per JD mentioned to get max ATS score
-6. The resume will be given in LateX format, so change the latex content.
+1. Read the job description (JD) and align the resume contents and keywords accordingly to maximise ATS score and rank best. add/remove/edit keywords in resume wherever relevant to get max ATS score as per the JD.
+
+3. Presere and Keep the output VALID LaTeX that can be compiled with pdflatex.
+4. Add JD in the ending in \\whitetext to get max ATS score .
+5. Check the resume again for any irrlevant keywords nad completely remove them.
+6. Finally return The resume tex ina given LateX format.
 ### Job Description
 ${jd}
 
