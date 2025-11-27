@@ -3,6 +3,7 @@ set -euo pipefail
 
 TEX_VERSION=0.15.0
 BUILD_TAG=20251006
+RELEASE_TAG=continuous
 ARCHIVE_CANDIDATES=(
 	"tectonic-${TEX_VERSION}+${BUILD_TAG}-x86_64-unknown-linux-gnu.tar.gz"
 	"tectonic-${TEX_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
@@ -12,7 +13,7 @@ mkdir -p bin tmp/tectonic-download
 ARCHIVE_PATH=""
 
 for ARCHIVE in "${ARCHIVE_CANDIDATES[@]}"; do
-	URL="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic-${TEX_VERSION}/${ARCHIVE}"
+	URL="https://github.com/tectonic-typesetting/tectonic/releases/download/${RELEASE_TAG}/${ARCHIVE}"
 	if curl -fsSL "$URL" -o tmp/tectonic-download/${ARCHIVE}; then
 		ARCHIVE_PATH="tmp/tectonic-download/${ARCHIVE}"
 		break
