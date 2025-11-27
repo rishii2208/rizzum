@@ -1,4 +1,4 @@
-import cors from "cors";
+import cors, { type CorsOptions } from "cors";
 import express, { Request, Response } from "express";
 import { config } from "./config.js";
 import { scoreResume } from "./lib/atsScore.js";
@@ -8,7 +8,22 @@ import type { AtsScoreResponse, CompileResponse, OptimizeRequestPayload, Optimiz
 
 const app = express();
 
-app.use(cors({ origin: config.clientOrigin, credentials: true }));
+const corsOptions: CorsOptions = {
+  origin(origin, callback) {
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (config.clientOrigins.includes("*") || config.clientOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+  },
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({ limit: "1mb" }));
 
 if (config.requestTimeoutMs > 0) {
@@ -85,6 +100,9 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
   res.status(500).json({ message: err.message || "Unexpected server error" });
 });
 
-app.listen(config.port, () => {
-  console.log(`Resume Editor API listening on http://localhost:${config.port}`);
+const PORT = process.env.PORT || config.port;
+
+app.listen(PORT, () => {
+  console.log(`Resume Editor API running on port ${PORT}`);
 });
+;

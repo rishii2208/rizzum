@@ -1,9 +1,16 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_API_BASE_URL || "";
+const FALLBACK_API_BASE_URL = "https://rizzum.onrender.com";
+const isBrowser = typeof window !== "undefined";
+const isLocalHost = () =>
+  !isBrowser
+    ? false
+    : ["localhost", "127.0.0.1"].some((host) => window.location.hostname === host);
+
+const resolvedBaseURL = import.meta.env.VITE_API_BASE_URL || (isBrowser && !isLocalHost() ? FALLBACK_API_BASE_URL : "");
 
 const api = axios.create({
-  baseURL: baseURL || undefined,
+  baseURL: resolvedBaseURL || undefined,
   timeout: 180_000
 });
 
