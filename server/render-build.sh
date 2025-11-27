@@ -26,6 +26,13 @@ if [[ -z "$ARCHIVE_PATH" ]]; then
 fi
 
 tar -xzf "$ARCHIVE_PATH" -C tmp/tectonic-download
-mv tmp/tectonic-download/tectonic*/tectonic bin/tectonic
+TECTONIC_BIN=$(find tmp/tectonic-download -type f -name tectonic -print -quit)
+
+if [[ -z "$TECTONIC_BIN" ]]; then
+	echo "Extracted archive does not contain a tectonic binary" >&2
+	exit 1
+fi
+
+mv "$TECTONIC_BIN" bin/tectonic
 chmod +x bin/tectonic
 rm -rf tmp/tectonic-download
