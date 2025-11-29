@@ -20,8 +20,8 @@ const buildPrompt = ({ jd, resume }: OptimizeRequestPayload) => `You are an assi
 
 Instructions:
 1. Read the job description (JD) and align the resume contents and keywords accordingly to maximise ATS score and rank best. add/remove/edit keywords in resume wherever relevant to get max ATS score as per the JD.
-
-3. Presere and Keep the output VALID LaTeX that can be compiled with pdflatex.
+2. Return only Latex Code in Output, nothing else. Do not add '''latex in the output. Only code
+3. Change only contents, never change structure or code.
 4. Add JD in the ending in \\whitetext to get max ATS score .
 5. Check the resume again for any irrlevant keywords nad completely remove them.
 6. Finally return The resume tex ina given LateX format.
