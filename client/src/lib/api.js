@@ -7,3 +7,4 @@ const api = axios.create({
 export const optimizeResume = (payload) => api.post("/api/optimize", payload);
 export const compileLatex = (latex) => api.post("/api/compile", { latex });
 export const fetchAtsScore = (payload) => api.post("/api/ats-score", payload);
+export const optimizeEmail = (payload) => api.post("/api/email-optimize", payload);
