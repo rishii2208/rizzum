@@ -3,8 +3,15 @@ import express, { Request, Response } from "express";
 import { config } from "./config.js";
 import { scoreResume } from "./lib/atsScore.js";
 import { compileLatexToPdf } from "./services/latexProxy.js";
-import { GeminiApiError, GeminiMissingKeyError, optimizeResume } from "./services/gemini.js";
-import type { AtsScoreResponse, CompileResponse, OptimizeRequestPayload, OptimizeResponse } from "./types.js";
+import { GeminiApiError, GeminiMissingKeyError, optimizeEmail, optimizeResume } from "./services/gemini.js";
+import type {
+  AtsScoreResponse,
+  CompileResponse,
+  EmailOptimizeRequestPayload,
+  EmailOptimizeResponse,
+  OptimizeRequestPayload,
+  OptimizeResponse
+} from "./types.js";
 
 const app = express();
 
@@ -47,6 +54,16 @@ const validatePayload = (payload: OptimizeRequestPayload) => {
   }
 };
 
+const validateEmailPayload = (payload: EmailOptimizeRequestPayload) => {
+  if (!payload.description?.trim()) {
+    throw new Error("Email context is required");
+  }
+
+  if (!payload.template?.trim()) {
+    throw new Error("Email template is required");
+  }
+};
+
 app.get("/health", (_req: Request, res: Response) => {
   res.json({ status: "ok" });
 });
@@ -62,6 +79,22 @@ app.post("/api/optimize", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("/api/optimize error", error);
     const message = (error as Error).message || "Failed to optimize resume";
+    const status = error instanceof GeminiMissingKeyError ? 503 : error instanceof GeminiApiError ? 502 : 500;
+    res.status(status).json({ message });
+  }
+});
+
+app.post("/api/email-optimize", async (req: Request, res: Response) => {
+  try {
+    const payload = req.body as EmailOptimizeRequestPayload;
+    validateEmailPayload(payload);
+
+    const optimized = await optimizeEmail(payload);
+    const response: EmailOptimizeResponse = optimized;
+    res.json(response);
+  } catch (error) {
+    console.error("/api/email-optimize error", error);
+    const message = (error as Error).message || "Failed to optimize email";
     const status = error instanceof GeminiMissingKeyError ? 503 : error instanceof GeminiApiError ? 502 : 500;
     res.status(status).json({ message });
   }
