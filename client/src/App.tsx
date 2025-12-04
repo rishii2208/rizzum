@@ -1,7 +1,10 @@
-import { type PropsWithChildren, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import Editor from "@monaco-editor/react";
+import { Link, Navigate, Route, Routes } from "react-router-dom";
 import { ScoreBadge } from "./components/ScoreBadge.tsx";
+import { Panel } from "./components/Panel.tsx";
+import { EmailPage } from "./pages/EmailPage.tsx";
 import { useDebounce } from "./hooks/useDebounce.ts";
 import { compileLatex, fetchAtsScore, optimizeResume } from "./lib/api.ts";
 import type { AtsScore } from "./types.ts";
@@ -200,19 +203,7 @@ const getErrorMessage = (err: unknown, fallback: string) => {
   return fallback;
 };
 
-type PanelProps = PropsWithChildren<{ title: string; actions?: ReactNode }>;
-
-const Panel = ({ title, children, actions }: PanelProps) => (
-  <section className="space-y-4 rounded-[32px] border-4 border-slate-900 bg-white/90 p-5 shadow-[8px_8px_0_0_#0f172a]">
-    <div className="flex items-center justify-between gap-3">
-      <h2 className="text-lg font-black tracking-wide text-slate-900">{title}</h2>
-      {actions}
-    </div>
-    {children}
-  </section>
-);
-
-function App() {
+function ResumePage() {
   const [jd, setJd] = useState(DEFAULT_JD);
   const [resume, setResume] = useState(DEFAULT_RESUME);
   const [optimizedLatex, setOptimizedLatex] = useState(DEFAULT_RESUME);
@@ -436,6 +427,27 @@ function App() {
 
   return (
     <div className="min-h-screen pb-16 text-slate-900">
+      <header className="border-b-4 border-slate-900 bg-white/90 px-6 py-8 shadow-[0_12px_0_0_#0f172a]">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-600">Resume Editor</p>
+              <h1 className="mt-2 text-3xl font-black text-slate-900">Tailor your LaTeX resume with AI</h1>
+            </div>
+            <nav className="flex flex-wrap items-center gap-2 text-sm font-semibold">
+              <span className="rounded-full bg-slate-900 px-3 py-1 text-white shadow-[4px_4px_0_0_#0f172a]">Resume</span>
+              <Link
+                to="/email-optimise"
+                className="rounded-full border-2 border-slate-900 bg-white px-3 py-1 text-slate-900 shadow-[4px_4px_0_0_#0f172a] transition hover:-translate-y-0.5 hover:bg-slate-100"
+              >
+                Email Optimizer
+              </Link>
+            </nav>
+          </div>
+          {error && <p className="text-sm font-semibold text-rose-600">{error}</p>}
+        </div>
+      </header>
+
       <main className="mx-auto mt-10 flex max-w-6xl flex-col gap-6 px-6 lg:flex-row lg:items-stretch">
         <div className="flex w-full flex-col gap-6" style={{ flex: 1, minWidth: 0 }}>
           <Panel title="Job Description">
@@ -592,7 +604,6 @@ function App() {
               {isOptimizing ? "Optimizing…" : "Optimize Resume"}
             </button>
           </div>
-          {error && <p className="text-center text-sm font-semibold text-rose-500">{error}</p>}
         </div>
       </main>
 
@@ -620,6 +631,20 @@ function App() {
         </div>
       )}
     </div>
+  );
+}
+
+export { ResumePage };
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<ResumePage />} />
+      <Route path="/email" element={<EmailPage />} />
+      <Route path="/email-optimize" element={<EmailPage />} />
+      <Route path="/email-optimise" element={<EmailPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
