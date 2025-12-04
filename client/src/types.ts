@@ -3,3 +3,8 @@ export type AtsScore = {
   matchedKeywords: string[];
   missingKeywords: string[];
 };
+
+export type EmailOptimization = {
+  optimizedSubject: string;
+  optimizedBody: string;
+};
