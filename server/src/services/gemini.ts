@@ -139,7 +139,7 @@ export const optimizeResume = async (payload: OptimizeRequestPayload) => {
     if (error instanceof GeminiApiError) {
       throw error;
     }
-    throw new GeminiApiError(error instanceof Error ? error.message : "Gemini API call failed");
+    throw new GeminiApiError(error instanceof Error ? error.message : "Gemini API call failed ");
   }
 };
 
