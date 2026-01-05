@@ -27,7 +27,6 @@ export type EmailOptimizePayload = {
 };
 
 export const optimizeResume = (payload: OptimizePayload) => api.post("/api/optimize", payload);
-export const compileLatex = (latex: string) => api.post("/api/compile", { latex });
 export const fetchAtsScore = (payload: OptimizePayload) => api.post("/api/ats-score", payload);
 export const optimizeEmail = (payload: EmailOptimizePayload) =>
   api.post<EmailOptimization>("/api/email-optimize", payload);

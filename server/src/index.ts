@@ -2,11 +2,9 @@ import cors, { type CorsOptions } from "cors";
 import express, { Request, Response } from "express";
 import { config } from "./config.js";
 import { scoreResume } from "./lib/atsScore.js";
-import { compileLatexToPdf } from "./services/latexProxy.js";
 import { GeminiApiError, GeminiMissingKeyError, optimizeEmail, optimizeResume } from "./services/gemini.js";
 import type {
   AtsScoreResponse,
-  CompileResponse,
   EmailOptimizeRequestPayload,
   EmailOptimizeResponse,
   OptimizeRequestPayload,
@@ -97,22 +95,6 @@ app.post("/api/email-optimize", async (req: Request, res: Response) => {
     const message = (error as Error).message || "Failed to optimize email";
     const status = error instanceof GeminiMissingKeyError ? 503 : error instanceof GeminiApiError ? 502 : 500;
     res.status(status).json({ message });
-  }
-});
-
-app.post("/api/compile", async (req: Request, res: Response) => {
-  try {
-    const { latex } = req.body as { latex: string };
-    if (!latex?.trim()) {
-      return res.status(400).json({ message: "LaTeX content is required" });
-    }
-
-    const pdfBase64 = await compileLatexToPdf(latex);
-    const response: CompileResponse = { pdfBase64 };
-    res.json(response);
-  } catch (error) {
-    console.error("/api/compile error", error);
-    res.status(500).json({ message: (error as Error).message || "Failed to compile LaTeX" });
   }
 });
 

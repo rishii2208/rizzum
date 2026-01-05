@@ -25,6 +25,5 @@ export const config = {
   clientOrigins: configuredOrigins?.length ? configuredOrigins : fallbackOrigins,
   geminiKey: process.env.GEMINI_API_KEY || "",
   geminiModel: process.env.GEMINI_MODEL || "models/gemini-2.5-flash",
-  tectonicPath: process.env.TECTONIC_PATH || "tectonic",
   requestTimeoutMs: Number(process.env.REQUEST_TIMEOUT_MS) || 180_000
 };

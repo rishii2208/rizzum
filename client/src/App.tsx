@@ -6,7 +6,7 @@ import { ScoreBadge } from "./components/ScoreBadge.tsx";
 import { Panel } from "./components/Panel.tsx";
 import { EmailPage } from "./pages/EmailPage.tsx";
 import { useDebounce } from "./hooks/useDebounce.ts";
-import { compileLatex, fetchAtsScore, optimizeResume } from "./lib/api.ts";
+import { fetchAtsScore, optimizeResume } from "./lib/api.ts";
 import type { AtsScore } from "./types.ts";
 
 type ApiErrorResponse = { message?: string };
@@ -131,10 +131,8 @@ function ResumePage() {
   const [jd, setJd] = useState(DEFAULT_JD);
   const [resume, setResume] = useState(DEFAULT_RESUME);
   const [optimizedLatex, setOptimizedLatex] = useState(DEFAULT_RESUME);
-  const [pdfBase64, setPdfBase64] = useState<string>("");
   const [atsScore, setAtsScore] = useState<AtsScore | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
-  const [isCompiling, setIsCompiling] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewHeight, setPreviewHeight] = useState(520);
   const [isResizingPreview, setIsResizingPreview] = useState(false);
@@ -145,13 +143,9 @@ function ResumePage() {
   const previewWidthState = useRef<{ startX: number; startWidth: number }>({ startX: 0, startWidth: 420 });
   const previewWidthRef = useRef(previewWidth);
   const [isDesktop, setIsDesktop] = useState(false);
-  const [pdfObjectUrl, setPdfObjectUrl] = useState<string | null>(null);
-  const [isFullPreviewOpen, setIsFullPreviewOpen] = useState(false);
 
   const debouncedLatex = useDebounce(optimizedLatex, 800);
 
-  const pdfDataUrl = useMemo(() => (pdfBase64 ? `data:application/pdf;base64,${pdfBase64}` : null), [pdfBase64]);
-  const pdfDisplaySrc = pdfObjectUrl ?? pdfDataUrl;
 
   useEffect(() => {
     previewHeightRef.current = previewHeight;
@@ -169,49 +163,7 @@ function ResumePage() {
     return () => media.removeEventListener("change", update);
   }, []);
 
-  useEffect(() => {
-    if (!pdfBase64) {
-      setPdfObjectUrl(null);
-      return;
-    }
-
-    try {
-      const byteCharacters = atob(pdfBase64);
-      const byteNumbers = new Uint8Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i += 1) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const blob = new Blob([byteNumbers], { type: "application/pdf" });
-      const baseUrl = URL.createObjectURL(blob);
-      const zoomedUrl = `${baseUrl}#zoom=page-width`;
-      setPdfObjectUrl(zoomedUrl);
-
-      return () => {
-        URL.revokeObjectURL(baseUrl);
-      };
-    } catch (err) {
-      console.error("Failed to build PDF preview URL", err);
-      setPdfObjectUrl(null);
-    }
-  }, [pdfBase64]);
-
-  const compile = useCallback(async (latex: string) => {
-    try {
-      if (!latex.trim()) return;
-      setIsCompiling(true);
-      const { data } = await compileLatex(latex);
-      setPdfBase64(data.pdfBase64);
-    } catch (err) {
-      console.error(err);
-      setError(getErrorMessage(err, "Failed to compile LaTeX"));
-    } finally {
-      setIsCompiling(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    compile(debouncedLatex);
-  }, [compile, debouncedLatex]);
+  // PDF compilation removed - no longer using Tectonic
 
   useEffect(() => {
     if (!isResizingPreview) return;
@@ -277,19 +229,6 @@ function ResumePage() {
     };
   }, [isResizingPreviewWidth]);
 
-  useEffect(() => {
-    if (!isFullPreviewOpen) return;
-
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsFullPreviewOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [isFullPreviewOpen]);
-
   const runAtsScore = useCallback(async (payload: { jd: string; resume: string }) => {
     try {
       const { data } = await fetchAtsScore(payload);
@@ -346,8 +285,6 @@ function ResumePage() {
       setIsOptimizing(false);
     }
   };
-
-  const closeFullPreview = () => setIsFullPreviewOpen(false);
 
   return (
     <div className="min-h-screen pb-16 text-slate-900">
@@ -466,10 +403,10 @@ function ResumePage() {
           }}
         >
           <Panel
-            title="Live PDF Preview"
+            title="Live Preview"
             actions={
               <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {isCompiling ? "Compiling…" : pdfBase64 ? "Up to date" : "Waiting for LaTeX"}
+                Preview disabled (PDF compilation removed)
               </span>
             }
           >
@@ -477,11 +414,7 @@ function ResumePage() {
               className="overflow-hidden rounded-[28px] border-4 border-slate-900 bg-slate-50 shadow-[6px_6px_0_0_#0f172a]"
               style={{ height: previewHeight }}
             >
-              {pdfDisplaySrc ? (
-                <iframe title="resume-preview" src={pdfDisplaySrc} className="h-full w-full" />
-              ) : (
-                <div className="flex h-full items-center justify-center text-slate-400">PDF preview pending</div>
-              )}
+              <div className="flex h-full items-center justify-center text-slate-400">PDF preview disabled</div>
             </div>
             <div
               role="separator"
@@ -493,28 +426,7 @@ function ResumePage() {
               <span className="h-1 w-20 rounded-full bg-slate-300 transition-colors" />
             </div>
             <div className="flex items-center justify-between text-xs text-slate-400">
-              <p>Drag handles to resize</p>
-              <button
-                type="button"
-                onClick={() => pdfDisplaySrc && setIsFullPreviewOpen(true)}
-                disabled={!pdfDisplaySrc}
-                aria-label="Open full preview"
-                className="flex items-center justify-center rounded-full border border-slate-900/30 bg-white/70 p-2 text-slate-700 shadow-sm transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                <svg
-                  className="h-4 w-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <circle cx="11" cy="11" r="7" />
-                  <line x1="16.65" y1="16.65" x2="21" y2="21" />
-                </svg>
-              </button>
+              <p>PDF compilation removed</p>
             </div>
           </Panel>
 
@@ -530,30 +442,6 @@ function ResumePage() {
           </div>
         </div>
       </main>
-
-      {isFullPreviewOpen && pdfDisplaySrc && (
-        <div
-          className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm"
-          onClick={(event) => {
-            if (event.target === event.currentTarget) {
-              closeFullPreview();
-            }
-          }}
-        >
-          <div className="flex h-full w-full items-center justify-center p-4">
-            <div className="relative flex h-full w-full max-w-6xl flex-col rounded-3xl border-4 border-white/30 bg-white">
-              <button
-                type="button"
-                onClick={closeFullPreview}
-                className="absolute right-4 top-4 rounded-full border border-slate-300 bg-white/80 px-3 py-1 text-sm font-semibold text-slate-600 shadow"
-              >
-                Close
-              </button>
-              <iframe title="full-resume-preview" src={pdfDisplaySrc} className="h-full w-full rounded-3xl" />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

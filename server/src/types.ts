@@ -18,10 +18,6 @@ export type EmailOptimizeResponse = {
   optimizedBody: string;
 };
 
-export type CompileResponse = {
-  pdfBase64: string;
-};
-
 export type AtsScoreResponse = {
   coverage: number;
   matchedKeywords: string[];
