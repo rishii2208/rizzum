@@ -20,6 +20,20 @@ export class GeminiApiError extends Error {
   }
 }
 
+const PERSONAL_PROFILE = `Rishi Raj Prajapati, Software Engineer with production experience in Node.js, Python, FastAPI, React, and cloud infrastructure. Built scalable systems serving 5M+ users with sub-100ms latency. Strong background in APIs, microservices, databases, and AI/ML integration.`;
+
+const EMAIL_BASE_TEMPLATE = `Hi [first name],
+
+I came across the [role] at [company] and wanted to reach out. [Insert specific reason about company/role].
+
+I'm currently [your situation] and recently [relevant achievement]. I'd love to learn more about bringing that experience to your team.
+
+If you're the right person, I'd appreciate a quick conversation. Happy to be pointed to whoever handles hiring.
+
+Thanks,
+[Your name]
+[Contact info]`;
+
 const buildPrompt = ({ jd, resume }: OptimizeRequestPayload) => `You are an unemployed software developer who will optimise present resume contents as per JD given.Your goal is to make changes in resume(add or modify or remove words or sentences in resume) in a way that it scores 100% as per present Job description given, and rank top in the database of job applications in sites like workday, indeed etc. You know AI, backend dvelopment, frontend development, databases, data structures and algorithms very well and have projects.So, optimise resume as per JD resuirements. For example if a job has backend Development role remove irrelevant skills like AI or Data processing or Machine learning. make resume relevant to the JD.  Rewire JD keyowrds into resume whereever relevant to stay competitive and rank best in resumes database.
 
 Instructions:
@@ -132,7 +146,7 @@ export const optimizeResume = async (payload: OptimizeRequestPayload) => {
   }
 
   try {
-    const prompt = buildResumePrompt(payload);
+    const prompt = buildPrompt(payload);
     return await callGemini(prompt);
   } catch (error) {
     console.error("[gemini] resume API call failed", error);
