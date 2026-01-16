@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import axios from "axios";
 import Editor from "@monaco-editor/react";
 import { Link, Navigate, Route, Routes } from "react-router-dom";
 import { ScoreBadge } from "./components/ScoreBadge.tsx";
 import { Panel } from "./components/Panel.tsx";
 import { EmailPage } from "./pages/EmailPage.tsx";
-import { useDebounce } from "./hooks/useDebounce.ts";
 import { fetchAtsScore, optimizeResume } from "./lib/api.ts";
 import type { AtsScore } from "./types.ts";
 
@@ -15,7 +14,7 @@ const DEFAULT_JD = `We need a Senior Software Engineer to build AI-powered devel
 Must have: React, TypeScript, Node.js, cloud (GCP/AWS) experience, and experience working with LLM APIs.
 Nice to have: TailwindCSS, PDF generation, ATS integrations.`;
 
-const DEFAULT_RESUME = String.raw`\documentclass[11pt,a4paper,sans]{moderncv}
+const DEFAULT_RESUME_LOCAL = String.raw`\documentclass[11pt,a4paper,sans]{moderncv}
 
 \moderncvstyle{banking}
 \moderncvcolor{black}
@@ -100,6 +99,219 @@ Full-stack engineer with production experience architecting scalable systems fro
 \end{document}
 `;
 
+const DEFAULT_RESUME_REMOTE = String.raw`\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.9in}
+\addtolength{\textheight}{1.6in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-6pt}]
+
+\pdfgentounicode=1
+
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-3pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-3pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-8pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-8pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-7pt}}
+
+\newcommand{\whitetext}[1]{{\color{white}#1}}
+
+\begin{document}
+
+% ----------HEADING----------
+\begin{center}
+    {\Huge \scshape Rishi Raj Prajapati} \\ \vspace{1pt}
+    \small \raisebox{-0.1\height}\faPhone\ +91-8700168283 ~ 
+    \href{mailto:rishirajprajapati22@gmail.com}{\raisebox{-0.2\height}\faEnvelope\ \underline{rishirajprajapati22@gmail.com}} ~ 
+    \href{https://linkedin.com/in/rishi-raj-prajapati/}{\raisebox{-0.2\height}\faLinkedin\ \underline{linkedin.com/in/rishi-raj-prajapati}}  ~
+    \href{https://github.com/rishii2208}{\raisebox{-0.2\height}\faGithub\ \underline{github.com/rishii2208}}
+    \vspace{-10pt}
+\end{center}
+
+% -----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Bachelor of Technology}{2022 -- 2026}
+      {Delhi Technological University (DTU), Delhi}{}
+  \resumeSubHeadingListEnd
+
+% -----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Software Developer (Backend)}{June - August 2025}
+      {AOC | Noida, India}{}
+      \resumeItemListStart
+        \resumeItem{Designed, developed, and maintained scalable backend systems and RESTful APIs, focusing on secure data handling and robust integration patterns.}
+        \resumeItem{Implemented secure RESTful APIs for user authentication, management, and efficient data processing, contributing to end-to-end data flow.}
+        \resumeItem{Optimized data storage and retrieval using MongoDB, ensuring reliable data persistence for backend services.}
+        \resumeItem{Collaborated effectively with cross-functional teams to deliver integrated software solutions, focusing on system reliability and documentation.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Software Developer Intern}{March 2024 - July 2024}
+      {Zebpay}{}
+      \resumeItemListStart
+        \resumeItem{Engineered highly scalable server-side REST APIs using Django Rest Framework, capable of handling high throughput (500+ requests/second) for critical data services.}
+        \resumeItem{Optimized PostgreSQL database schemas and query performance by 40\% through advanced indexing and data modeling techniques, crucial for data warehousing.}
+        \resumeItem{Automated deployments on AWS (EC2, S3, CloudFront) with CI/CD workflows, demonstrating expertise in infrastructure as code and efficient release management.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+% -----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+    
+      \resumeProjectHeading
+          {\textbf{Slander – P2P Real-Time Video Chat Platform} $|$ \emph{NextJS, ExpressJS, Python, Django, PostgreSQL, OAuth 2.0} $|$ \href{http://slander.live/}{\underline{Link}}}{}
+          \resumeItemListStart
+            \resumeItem{Engineered a full-stack, real-time video chat platform with robust backend infrastructure and secure user interactions, emphasizing data security.}
+            \resumeItem{Developed responsive web UIs with Django and NextJS, implementing secure authentication flows and granular permission management using OAuth 2.0 principles.}
+            \resumeItem{Implemented real-time data streaming and robust backend services, ensuring seamless user experience and reliable data synchronization.}
+            \resumeItem{Designed and implemented secure user authentication and authorization mechanisms, including OAuth 2.0 flows for secure access and integration.}
+          \resumeItemListEnd
+          
+      \resumeProjectHeading
+          {\textbf{EasyAlgo Dynamic Website} $|$ \emph{CSS, HTML, Django, PostgreSQL, JavaScript, Python} $|$ \href{https://github.com}{\underline{GitHub}}}{May 2023 - June 2023}
+          \resumeItemListStart
+            \resumeItem{Developed an interactive learning platform, utilizing Django and PostgreSQL for robust data management, content delivery, and schema evolution.}
+            \resumeItem{Managed project lifecycle from planning to execution, coordinating content creation and feature integration to ensure timely delivery and stakeholder alignment.}
+            \resumeItem{Implemented data models and database schemas for tutorials and quizzes, facilitating efficient content updates and user progress tracking.}
+            \resumeItem{Integrated user engagement features (likes, comments) with a focus on capturing and analyzing interaction data, supporting compliance considerations and metadata management.}
+          \resumeItemListEnd
+          
+    \resumeSubHeadingListEnd
+
+% -----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages:}{ Python (preferred), JavaScript, SQL, PowerShell, HTML} \\
+     \textbf{Frameworks \& Libraries:}{ Node.js, Express.js, Django, REST APIs, Microsoft Graph SDKs, Graph Explorer/Postman, Bootstrap} \\
+     \textbf{Tools \& Platforms:}{ Git, GitHub, Azure DevOps, VS Code, Linux CLI, Docker, AWS (EC2, S3, RDS), Azure Services (Functions, Logic Apps, Data Factory, Storage)} \\
+     \textbf{Databases:}{ PostgreSQL, MongoDB, SQL (data modeling, schema evolution, metadata, data lineage)} \\
+     \textbf{Core Concepts:}{ Data Structures \& Algorithms, Backend Development, API Development (Microsoft Graph API), System Design, M365 Data Extraction \& Integration, ETL Pipelines, OAuth 2.0, Azure AD App Registrations, Least-privilege Permissions, Conditional Access, Data Modeling, Schema Evolution, Metadata Management, Data Lineage, M365 Security & Compliance (Data Residency, Retention, MIP Sensitivity Labels, DLP, eDiscovery, Auditing), Throttling, Pagination, Delta Sync, Change Tracking, Idempotent Upserts, Webhooks/Subscriptions, CI/CD (GitHub Actions, Azure DevOps), Containerization (Docker), Infrastructure as Code (IaC), Performance Tuning (rate-limit strategy, parallelization, backoff)} \\
+     \textbf{Soft Skills:}{ Critical Thinking, Problem Solving, Excellent Communication, Collaboration, Documentation, Attention to Detail, Self-starter, Independent Operation}
+    }}
+ \end{itemize}
+
+% -----------ACHIEVEMENTS-----------
+\section{Achievements and Position of Responsibilities}
+    \resumeSubHeadingListStart
+        \resumeProjectHeading
+          {\textbf{Main Coordinator, Roundtable DTU } $|$ Delhi}{Led and organized CTFs and cybersecurity workshops}
+        \resumeProjectHeading
+          {\textbf{CTF Event Coordinator,Invictus DTU }}{Led and organized hacking challenges at DTU's annual tech fest.}
+          
+    \resumeSubHeadingListEnd
+
+\whitetext{
+### Job Description
+You will lead discovery, design secure app permissions, build reliable extract/transform/load pipelines, and deliver production-ready integrations with documentation and handoff. Seeking a hands-on SME who can scope, plan, and execute the end-to-end extraction of Microsoft 365 data via Microsoft Graph (and related APIs) and integrate it into a proprietary data warehousing system.
+Responsibilities
+• Discovery and Planning
+• Conduct stakeholder interviews and data inventory across M365 workloads (SharePoint Online, OneDrive, Teams, Exchange Online, Entra ID/Azure AD).
+• Define scope, data models, mapping, and success criteria; produce a project plan with milestones, risks, and estimates.
+• Architecture and Security
+• Design the extraction architecture using Microsoft Graph and related services (Graph SDKs, delta queries, subscriptions/webhooks, Graph Data Connect where appropriate).
+• Implement Azure AD app registrations, OAuth 2.0 flows, and least-privilege permissions (delegated vs. application) aligned with Conditional Access and tenant policies.
+• Data Extraction and Integration
+• Build robust pipelines to extract content and metadata (e.g., SharePoint lists/libraries, sites/drives/items, OneDrive, Teams channels/files, mailbox metadata, directory objects, audit/usage reports).
+• Handle throttling, pagination, retries, delta sync, change tracking, and idempotent upserts.
+• Transform and map data to target schemas; stage data (e.g., files/JSON/CSV/Parquet) and load into the proprietary data warehouse via APIs, connectors, or batch loads.
+• Compliance and Governance
+• Respect data residency, retention, MIP sensitivity labels, DLP, eDiscovery, and auditing requirements.
+• Navigate protected endpoints (e.g., Teams messages export) and approval processes; propose compliant alternatives when needed.
+Skills
+• 5+ years building integrations with Microsoft 365, including advanced use of Microsoft Graph API.
+• Proven delivery of data pipelines/ETL from M365 workloads:
+• SharePoint Online and OneDrive (sites, lists, libraries, drives/files, permissions).
+• Teams (channels, files; familiarity with protected chat/meeting export APIs and compliance boundaries).
+• Exchange Online (mailbox and message metadata, calendars) and directory objects in Entra ID (Azure AD). Strong expertise in:
+• OAuth 2.0, Azure AD app registrations, permissions consent, service principals, Conditional Access impacts.
+• Graph SDKs and REST (C#/.NET or Python preferred); PowerShell for automation; Graph Explorer/Postman.
+• Handling Graph constraints: throttling, batching, pagination, delta queries, webhooks/subscriptions.
+• Data modeling and transformation; SQL; schema evolution; metadata and lineage.
+• Experience integrating with custom/proprietary data warehouses (API-based or batch ingestion), including building connectors or staging layers.
+• Solid understanding of M365 security, compliance, and governance (retention, labels, DLP, eDiscovery/audit).
+• Self-starter who can operate independently in a part-time capacity; excellent communication and documentation.
+• Experience with Azure services (Functions, Logic Apps, Data Factory, Storage) for orchestration and staging.
+• Familiarity with Graph Data Connect, SharePoint REST/CSOM, Exchange Web Services deprecation nuances.
+• CI/CD (GitHub Actions/Azure DevOps), containerization, and IaC (Bicep/Terraform).
+• Background in performance tuning for large tenants (rate-limit strategy, parallelization, backoff).
+}
+\end{document}
+`;
+
 const editorOptions = {
   fontSize: 14,
   minimap: { enabled: false },
@@ -107,12 +319,6 @@ const editorOptions = {
   wordWrap: "on",
   automaticLayout: true
 } as const;
-
-const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
-const PREVIEW_HEIGHT_MIN = 280;
-const PREVIEW_HEIGHT_MAX = 900;
-const PREVIEW_WIDTH_MIN = 320;
-const PREVIEW_WIDTH_MAX = 720;
 
 const getErrorMessage = (err: unknown, fallback: string) => {
   if (axios.isAxiosError(err)) {
@@ -127,107 +333,19 @@ const getErrorMessage = (err: unknown, fallback: string) => {
   return fallback;
 };
 
+type ResumeTemplate = "local" | "remote";
+
 function ResumePage() {
   const [jd, setJd] = useState(DEFAULT_JD);
-  const [resume, setResume] = useState(DEFAULT_RESUME);
-  const [optimizedLatex, setOptimizedLatex] = useState(DEFAULT_RESUME);
+  const [selectedTemplate, setSelectedTemplate] = useState<ResumeTemplate>("local");
+  const [resumeLocal, setResumeLocal] = useState(DEFAULT_RESUME_LOCAL);
+  const [resumeRemote, setResumeRemote] = useState(DEFAULT_RESUME_REMOTE);
+  const [optimizedLatex, setOptimizedLatex] = useState("");
   const [atsScore, setAtsScore] = useState<AtsScore | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [previewHeight, setPreviewHeight] = useState(520);
-  const [isResizingPreview, setIsResizingPreview] = useState(false);
-  const previewResizeState = useRef<{ startY: number; startHeight: number }>({ startY: 0, startHeight: 520 });
-  const previewHeightRef = useRef(previewHeight);
-  const [previewWidth, setPreviewWidth] = useState(420);
-  const [isResizingPreviewWidth, setIsResizingPreviewWidth] = useState(false);
-  const previewWidthState = useRef<{ startX: number; startWidth: number }>({ startX: 0, startWidth: 420 });
-  const previewWidthRef = useRef(previewWidth);
-  const [isDesktop, setIsDesktop] = useState(false);
 
-  const debouncedLatex = useDebounce(optimizedLatex, 800);
-
-
-  useEffect(() => {
-    previewHeightRef.current = previewHeight;
-  }, [previewHeight]);
-
-  useEffect(() => {
-    previewWidthRef.current = previewWidth;
-  }, [previewWidth]);
-
-  useEffect(() => {
-    const media = window.matchMedia("(min-width: 1024px)");
-    const update = () => setIsDesktop(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
-  // PDF compilation removed - no longer using Tectonic
-
-  useEffect(() => {
-    if (!isResizingPreview) return;
-
-    const handleMove = (event: MouseEvent | TouchEvent) => {
-      const clientY = "touches" in event ? event.touches[0]?.clientY : event.clientY;
-      if (typeof clientY !== "number") return;
-      event.preventDefault();
-      const { startY, startHeight } =
-        previewResizeState.current ?? { startY: clientY, startHeight: previewHeightRef.current };
-      const delta = clientY - startY;
-      const nextHeight = clamp(startHeight + delta, PREVIEW_HEIGHT_MIN, PREVIEW_HEIGHT_MAX);
-      setPreviewHeight(nextHeight);
-    };
-
-    const stop = () => setIsResizingPreview(false);
-
-    window.addEventListener("mousemove", handleMove);
-    window.addEventListener("touchmove", handleMove, { passive: false });
-    window.addEventListener("mouseup", stop);
-    window.addEventListener("touchend", stop);
-    window.addEventListener("touchcancel", stop);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMove);
-      window.removeEventListener("touchmove", handleMove);
-      window.removeEventListener("mouseup", stop);
-      window.removeEventListener("touchend", stop);
-      window.removeEventListener("touchcancel", stop);
-    };
-  }, [isResizingPreview]);
-
-  useEffect(() => {
-    if (!isResizingPreviewWidth) return;
-
-    const handleMove = (event: MouseEvent | TouchEvent) => {
-      const clientX = "touches" in event ? event.touches[0]?.clientX : event.clientX;
-      if (typeof clientX !== "number") return;
-      event.preventDefault();
-      const { startX, startWidth } = previewWidthState.current ?? {
-        startX: clientX,
-        startWidth: previewWidthRef.current
-      };
-      const delta = clientX - startX;
-      const nextWidth = clamp(startWidth + delta, PREVIEW_WIDTH_MIN, PREVIEW_WIDTH_MAX);
-      setPreviewWidth(nextWidth);
-    };
-
-    const stop = () => setIsResizingPreviewWidth(false);
-
-    window.addEventListener("mousemove", handleMove);
-    window.addEventListener("touchmove", handleMove, { passive: false });
-    window.addEventListener("mouseup", stop);
-    window.addEventListener("touchend", stop);
-    window.addEventListener("touchcancel", stop);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMove);
-      window.removeEventListener("touchmove", handleMove);
-      window.removeEventListener("mouseup", stop);
-      window.removeEventListener("touchend", stop);
-      window.removeEventListener("touchcancel", stop);
-    };
-  }, [isResizingPreviewWidth]);
+  const currentResume = selectedTemplate === "local" ? resumeLocal : resumeRemote;
 
   const runAtsScore = useCallback(async (payload: { jd: string; resume: string }) => {
     try {
@@ -238,36 +356,8 @@ function ResumePage() {
     }
   }, []);
 
-  const beginPreviewResize = (clientY: number) => {
-    previewResizeState.current = { startY: clientY, startHeight: previewHeightRef.current };
-    setIsResizingPreview(true);
-  };
-
-  const handlePreviewResizeStart = (
-    event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
-  ) => {
-    const clientY = "touches" in event ? event.touches[0]?.clientY : event.clientY;
-    if (typeof clientY !== "number") return;
-    event.preventDefault();
-    beginPreviewResize(clientY);
-  };
-
-  const beginPreviewWidthResize = (clientX: number) => {
-    previewWidthState.current = { startX: clientX, startWidth: previewWidthRef.current };
-    setIsResizingPreviewWidth(true);
-  };
-
-  const handlePreviewWidthResizeStart = (
-    event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
-  ) => {
-    const clientX = "touches" in event ? event.touches[0]?.clientX : event.clientX;
-    if (typeof clientX !== "number") return;
-    event.preventDefault();
-    beginPreviewWidthResize(clientX);
-  };
-
   const handleOptimize = async () => {
-    if (!jd.trim() || !resume.trim()) {
+    if (!jd.trim() || !currentResume.trim()) {
       setError("Both JD and resume LaTeX are required");
       return;
     }
@@ -275,7 +365,7 @@ function ResumePage() {
     setIsOptimizing(true);
     setError(null);
     try {
-      const { data } = await optimizeResume({ jd, resume });
+      const { data } = await optimizeResume({ jd, resume: currentResume });
       setOptimizedLatex(data.optimizedLatex);
       await runAtsScore({ jd, resume: data.optimizedLatex });
     } catch (err) {
@@ -289,7 +379,7 @@ function ResumePage() {
   return (
     <div className="min-h-screen pb-16 text-slate-900">
       <header className="border-b-4 border-slate-900 bg-white/90 px-6 py-8 shadow-[0_12px_0_0_#0f172a]">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-600">Resume Editor</p>
@@ -309,138 +399,127 @@ function ResumePage() {
         </div>
       </header>
 
-      <main className="mx-auto mt-10 flex max-w-6xl flex-col gap-6 px-6 lg:flex-row lg:items-stretch">
-        <div className="flex w-full flex-col gap-6" style={{ flex: 1, minWidth: 0 }}>
-          <Panel title="Job Description">
-            <textarea
-              className="h-40 w-full rounded-2xl border-4 border-slate-900/30 bg-slate-100 p-4 font-mono text-sm text-slate-900 outline-none transition focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-yellow-300"
-              value={jd}
-              onChange={(e) => setJd(e.target.value)}
-            />
+      <main className="mx-auto mt-10 flex max-w-7xl flex-col gap-6 px-6">
+        <Panel title="Job Description">
+          <textarea
+            className="h-40 w-full rounded-2xl border-4 border-slate-900/30 bg-slate-100 p-4 font-mono text-sm text-slate-900 outline-none transition focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+            value={jd}
+            onChange={(e) => setJd(e.target.value)}
+          />
+        </Panel>
+
+        <Panel title="Select Resume Template">
+          <div className="flex gap-6">
+            <label className="flex cursor-pointer items-center gap-3">
+              <input
+                type="radio"
+                name="template"
+                value="local"
+                checked={selectedTemplate === "local"}
+                onChange={(e) => setSelectedTemplate(e.target.value as ResumeTemplate)}
+                className="h-5 w-5 cursor-pointer accent-slate-900"
+              />
+              <span className="font-semibold text-slate-900">Original Resume LaTeX (Local Jobs)</span>
+            </label>
+            <label className="flex cursor-pointer items-center gap-3">
+              <input
+                type="radio"
+                name="template"
+                value="remote"
+                checked={selectedTemplate === "remote"}
+                onChange={(e) => setSelectedTemplate(e.target.value as ResumeTemplate)}
+                className="h-5 w-5 cursor-pointer accent-slate-900"
+              />
+              <span className="font-semibold text-slate-900">Original Resume LaTeX (Remote Jobs)</span>
+            </label>
+          </div>
+        </Panel>
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <Panel title={selectedTemplate === "local" ? "Original Resume LaTeX (Local)" : "Original Resume LaTeX (Remote)"}>
+            <div className="rounded-[28px] border-4 border-slate-900 bg-white p-1 shadow-[6px_6px_0_0_#0f172a]">
+              <Editor
+                height="500px"
+                defaultLanguage="latex"
+                theme="vs"
+                options={editorOptions}
+                value={currentResume}
+                onChange={(val) =>
+                  selectedTemplate === "local" ? setResumeLocal(val || "") : setResumeRemote(val || "")
+                }
+              />
+            </div>
           </Panel>
 
-          <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-            <Panel title="Original Resume LaTeX">
-              <div className="rounded-[28px] border-4 border-slate-900 bg-white p-1 shadow-[6px_6px_0_0_#0f172a]">
+          <Panel title="Optimized LaTeX Code Output">
+            <div className="rounded-[28px] border-4 border-slate-900 bg-white p-1 shadow-[6px_6px_0_0_#0f172a]">
+              {optimizedLatex ? (
                 <Editor
-                  height="300px"
+                  height="500px"
                   defaultLanguage="latex"
                   theme="vs"
-                  options={editorOptions}
-                  value={resume}
-                  onChange={(val) => setResume(val || "")}
-                />
-              </div>
-            </Panel>
-
-            <Panel title="Optimized LaTeX">
-              <div className="rounded-[28px] border-4 border-slate-900 bg-white p-1 shadow-[6px_6px_0_0_#0f172a]">
-                <Editor
-                  height="300px"
-                  defaultLanguage="latex"
-                  theme="vs"
-                  options={editorOptions}
+                  options={{ ...editorOptions, readOnly: false }}
                   value={optimizedLatex}
                   onChange={(value) => setOptimizedLatex(value || "")}
                 />
-              </div>
-            </Panel>
-          </div>
-          {atsScore && (
-            <Panel title="ATS Insights">
-              <div className="space-y-4 text-sm text-slate-700">
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Top matched keywords</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {atsScore.matchedKeywords.map((keyword) => (
-                      <span
-                        key={keyword}
-                        className="rounded-full border-2 border-slate-900/40 bg-emerald-200 px-3 py-1 font-semibold text-slate-900"
-                      >
-                        {keyword}
-                      </span>
-                    ))}
-                    {!atsScore.matchedKeywords.length && <span className="text-slate-400">No matches yet</span>}
-                  </div>
+              ) : (
+                <div className="flex h-[500px] items-center justify-center text-slate-400">
+                  <p className="text-center">
+                    Click "Optimize Resume" to generate
+                    <br />
+                    optimized LaTeX code
+                  </p>
                 </div>
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">High-priority gaps</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {atsScore.missingKeywords.map((keyword) => (
-                      <span
-                        key={keyword}
-                        className="rounded-full border-2 border-slate-900/40 bg-rose-200 px-3 py-1 font-semibold text-slate-900"
-                      >
-                        {keyword}
-                      </span>
-                    ))}
-                    {!atsScore.missingKeywords.length && <span className="text-slate-400">Fully covered!</span>}
-                  </div>
-                </div>
-              </div>
-            </Panel>
-          )}
-        </div>
-
-        <div className="hidden lg:flex flex-col items-center justify-center px-2">
-          <div
-            role="separator"
-            aria-label="Resize workspace"
-            onMouseDown={handlePreviewWidthResizeStart}
-            onTouchStart={handlePreviewWidthResizeStart}
-            className="flex h-full cursor-col-resize select-none items-center"
-          >
-            <span className="h-40 w-1 rounded-full bg-slate-300" />
-          </div>
-        </div>
-
-        <div
-          className="flex w-full flex-col gap-6 lg:w-auto"
-          style={{
-            width: isDesktop ? previewWidth : "100%",
-            maxWidth: isDesktop ? previewWidth : "100%",
-            flexBasis: isDesktop ? previewWidth : "auto"
-          }}
-        >
-          <Panel
-            title="Live Preview"
-            actions={
-              <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Preview disabled (PDF compilation removed)
-              </span>
-            }
-          >
-            <div
-              className="overflow-hidden rounded-[28px] border-4 border-slate-900 bg-slate-50 shadow-[6px_6px_0_0_#0f172a]"
-              style={{ height: previewHeight }}
-            >
-              <div className="flex h-full items-center justify-center text-slate-400">PDF preview disabled</div>
-            </div>
-            <div
-              role="separator"
-              aria-label="Resize preview"
-              onMouseDown={handlePreviewResizeStart}
-              onTouchStart={handlePreviewResizeStart}
-              className="flex cursor-row-resize select-none items-center justify-center py-2"
-            >
-              <span className="h-1 w-20 rounded-full bg-slate-300 transition-colors" />
-            </div>
-            <div className="flex items-center justify-between text-xs text-slate-400">
-              <p>PDF compilation removed</p>
+              )}
             </div>
           </Panel>
-
-          <div className="flex items-center justify-center gap-4">
-            <ScoreBadge coverage={atsScore?.coverage} />
-            <button
-              onClick={handleOptimize}
-              disabled={isOptimizing}
-              className="flex items-center gap-2 rounded-full border-4 border-slate-900 bg-yellow-300 px-8 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isOptimizing ? "Optimizing…" : "Optimize Resume"}
-            </button>
-          </div>
         </div>
+
+        <div className="flex items-center justify-center gap-4">
+          <ScoreBadge coverage={atsScore?.coverage} />
+          <button
+            onClick={handleOptimize}
+            disabled={isOptimizing}
+            className="flex items-center gap-2 rounded-full border-4 border-slate-900 bg-yellow-300 px-8 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isOptimizing ? "Optimizing…" : "Optimize Resume"}
+          </button>
+        </div>
+
+        {atsScore && (
+          <Panel title="ATS Insights">
+            <div className="space-y-4 text-sm text-slate-700">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Top matched keywords</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {atsScore.matchedKeywords.map((keyword) => (
+                    <span
+                      key={keyword}
+                      className="rounded-full border-2 border-slate-900/40 bg-emerald-200 px-3 py-1 font-semibold text-slate-900"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                  {!atsScore.matchedKeywords.length && <span className="text-slate-400">No matches yet</span>}
+                </div>
+              </div>
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">High-priority gaps</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {atsScore.missingKeywords.map((keyword) => (
+                    <span
+                      key={keyword}
+                      className="rounded-full border-2 border-slate-900/40 bg-rose-200 px-3 py-1 font-semibold text-slate-900"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                  {!atsScore.missingKeywords.length && <span className="text-slate-400">Fully covered!</span>}
+                </div>
+              </div>
+            </div>
+          </Panel>
+        )}
       </main>
     </div>
   );
