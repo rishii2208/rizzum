@@ -26,7 +26,14 @@ export type EmailOptimizePayload = {
   subject?: string;
 };
 
+export type CoverLetterOptimizePayload = {
+  jd: string;
+  template: string;
+};
+
 export const optimizeResume = (payload: OptimizePayload) => api.post("/api/optimize", payload);
 export const fetchAtsScore = (payload: OptimizePayload) => api.post("/api/ats-score", payload);
 export const optimizeEmail = (payload: EmailOptimizePayload) =>
   api.post<EmailOptimization>("/api/email-optimize", payload);
+export const optimizeCoverLetter = (payload: CoverLetterOptimizePayload) =>
+  api.post("/api/cover-letter-optimize", payload);

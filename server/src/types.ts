@@ -18,6 +18,15 @@ export type EmailOptimizeResponse = {
   optimizedBody: string;
 };
 
+export type CoverLetterOptimizeRequestPayload = {
+  jd: string;
+  template: string;
+};
+
+export type CoverLetterOptimizeResponse = {
+  coverLetter: string;
+};
+
 export type AtsScoreResponse = {
   coverage: number;
   matchedKeywords: string[];

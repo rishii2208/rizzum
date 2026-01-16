@@ -5,7 +5,7 @@ import { Link, Navigate, Route, Routes } from "react-router-dom";
 import { ScoreBadge } from "./components/ScoreBadge.tsx";
 import { Panel } from "./components/Panel.tsx";
 import { EmailPage } from "./pages/EmailPage.tsx";
-import { fetchAtsScore, optimizeResume } from "./lib/api.ts";
+import { fetchAtsScore, optimizeCoverLetter, optimizeResume } from "./lib/api.ts";
 import type { AtsScore } from "./types.ts";
 
 type ApiErrorResponse = { message?: string };
@@ -312,6 +312,35 @@ Skills
 \end{document}
 `;
 
+const DEFAULT_COVER_LETTER = `Rishi Raj Prajapati
+Developer
+rishirajprajapati22@gmail.com
++918700168283
+https://github.com/rishii2208
+https://www.linkedin.com/in/rishi-raj-prajapati/
+https://rishii.vercel.app
+
+[Date]
+
+[Hiring Manager Name]
+[Hiring Manager Title]
+[Company Name]
+[Company Address Line 1]
+[City, State, ZIP Code]
+
+Dear [Hiring Manager First Name]:
+
+Having recently come across your job posting for a [Job Title] at [Company Name] and subsequently reading the job description, I knew I had to apply immediately. As a [City] local who has earned a master's degree in [Degree / Field] and worked for top companies in [Industry / Region], this role feels like a natural next step in my career.
+
+Currently a Developer at AOC, I manage a variety of responsibilities that closely align with what your job description outlines. These include establishing secure cloud environments, ensuring system uptime, building, designing, and deploying complex SaaS-based applications, and handling production monitoring. With over 3 years of experience in engineering and cloud services, particularly with [Key Technologies / Tools mentioned in job description], I believe I would be well suited to take on the challenges of [role mentioned in JD] role.
+
+At [Current Company], I played a key role in overhauling the bug tracking and ticketing system for the cloud engineering team. As a result, issues were identified approximately [Percentage]% earlier on average. Prior to that, I led a cross-functional team to expand internal REST and API usage, improving overall productivity by roughly [Percentage]%.
+
+I would welcome the opportunity to speak with you and share more about how I can contribute to [Company Name]'s cloud initiatives. Thank you for your time and consideration. I look forward to your response.
+
+Sincerely,
+Rishi`;
+
 const editorOptions = {
   fontSize: 14,
   minimap: { enabled: false },
@@ -341,8 +370,11 @@ function ResumePage() {
   const [resumeLocal, setResumeLocal] = useState(DEFAULT_RESUME_LOCAL);
   const [resumeRemote, setResumeRemote] = useState(DEFAULT_RESUME_REMOTE);
   const [optimizedLatex, setOptimizedLatex] = useState("");
+  const [coverLetterTemplate, setCoverLetterTemplate] = useState(DEFAULT_COVER_LETTER);
+  const [generatedCoverLetter, setGeneratedCoverLetter] = useState("");
   const [atsScore, setAtsScore] = useState<AtsScore | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
+  const [isOptimizingWithCoverLetter, setIsOptimizingWithCoverLetter] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const currentResume = selectedTemplate === "local" ? resumeLocal : resumeRemote;
@@ -373,6 +405,33 @@ function ResumePage() {
       setError(getErrorMessage(err, "Failed to optimize resume"));
     } finally {
       setIsOptimizing(false);
+    }
+  };
+
+  const handleOptimizeWithCoverLetter = async () => {
+    if (!jd.trim() || !currentResume.trim() || !coverLetterTemplate.trim()) {
+      setError("JD, resume LaTeX, and cover letter template are required");
+      return;
+    }
+
+    setIsOptimizingWithCoverLetter(true);
+    setError(null);
+    try {
+      // Optimize resume
+      const resumeResponse = await optimizeResume({ jd, resume: currentResume });
+      setOptimizedLatex(resumeResponse.data.optimizedLatex);
+      
+      // Generate cover letter
+      const coverLetterResponse = await optimizeCoverLetter({ jd, template: coverLetterTemplate });
+      setGeneratedCoverLetter(coverLetterResponse.data.coverLetter);
+      
+      // Get ATS score
+      await runAtsScore({ jd, resume: resumeResponse.data.optimizedLatex });
+    } catch (err) {
+      console.error(err);
+      setError(getErrorMessage(err, "Failed to optimize resume and cover letter"));
+    } finally {
+      setIsOptimizingWithCoverLetter(false);
     }
   };
 
@@ -479,11 +538,50 @@ function ResumePage() {
           <ScoreBadge coverage={atsScore?.coverage} />
           <button
             onClick={handleOptimize}
-            disabled={isOptimizing}
+            disabled={isOptimizing || isOptimizingWithCoverLetter}
             className="flex items-center gap-2 rounded-full border-4 border-slate-900 bg-yellow-300 px-8 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isOptimizing ? "Optimizing…" : "Optimize Resume"}
           </button>
+          <button
+            onClick={handleOptimizeWithCoverLetter}
+            disabled={isOptimizing || isOptimizingWithCoverLetter}
+            className="flex items-center gap-2 rounded-full border-4 border-slate-900 bg-emerald-400 px-8 py-3 text-sm font-black uppercase tracking-wide text-slate-900 shadow-[6px_6px_0_0_#0f172a] transition hover:-translate-y-1 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isOptimizingWithCoverLetter ? "Generating…" : "Optimize + Cover Letter"}
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <Panel title="Cover Letter Preview">
+            <div className="rounded-[28px] border-4 border-slate-900 bg-white p-1 shadow-[6px_6px_0_0_#0f172a]">
+              <textarea
+                className="h-[400px] w-full resize-none rounded-[24px] border-0 p-4 font-mono text-sm text-slate-900 outline-none focus:ring-2 focus:ring-yellow-300"
+                value={coverLetterTemplate}
+                onChange={(e) => setCoverLetterTemplate(e.target.value)}
+              />
+            </div>
+          </Panel>
+
+          <Panel title="Generated Cover Letter">
+            <div className="rounded-[28px] border-4 border-slate-900 bg-white p-1 shadow-[6px_6px_0_0_#0f172a]">
+              {generatedCoverLetter ? (
+                <textarea
+                  className="h-[400px] w-full resize-none rounded-[24px] border-0 p-4 font-mono text-sm text-slate-900 outline-none focus:ring-2 focus:ring-emerald-300"
+                  value={generatedCoverLetter}
+                  onChange={(e) => setGeneratedCoverLetter(e.target.value)}
+                />
+              ) : (
+                <div className="flex h-[400px] items-center justify-center text-slate-400">
+                  <p className="text-center">
+                    Click "Optimize + Cover Letter" to generate
+                    <br />
+                    a personalized cover letter
+                  </p>
+                </div>
+              )}
+            </div>
+          </Panel>
         </div>
 
         {atsScore && (

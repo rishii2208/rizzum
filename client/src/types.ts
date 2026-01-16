@@ -8,3 +8,7 @@ export type EmailOptimization = {
   optimizedSubject: string;
   optimizedBody: string;
 };
+
+export type CoverLetterOptimization = {
+  coverLetter: string;
+};

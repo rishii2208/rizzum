@@ -1,6 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { config } from "../config.js";
 import type {
+  CoverLetterOptimizeRequestPayload,
+  CoverLetterOptimizeResponse,
   EmailOptimizeRequestPayload,
   EmailOptimizeResponse,
   OptimizeRequestPayload
@@ -81,6 +83,33 @@ Output requirements:
 - "subject": the personalised subject line (max 90 characters) that references the role/company context.
 - "body": the final multi-line email body with paragraph breaks represented using \n.
 - Make sure both fields are strings.`;
+
+const buildCoverLetterPrompt = ({ jd, template }: CoverLetterOptimizeRequestPayload) => `You are an expert career advisor and professional cover letter writer. Your job is to rewrite and personalize the cover letter template to be highly tailored to the specific job description provided while maintaining the sender's professional background and achievements.
+
+Follow these instructions carefully:
+1. Carefully analyze the job description to understand the role requirements, company culture, key technologies, and responsibilities.
+2. Replace all placeholders (e.g., [Job Title], [Company Name], [Hiring Manager Name], etc.) with appropriate values derived from the job description. If information is not available, use generic but professional alternatives.
+3. Ensure the cover letter highlights relevant achievements and skills from the sender's background that directly align with the job requirements.
+4. Use specific quantifiable achievements where possible to demonstrate impact.
+5. Match the tone to be professional, confident, and genuinely interested in the role.
+6. Keep the cover letter concise (around 300-400 words) and focused on what value the candidate brings to the role.
+7. Ensure the current date is formatted properly.
+8. Make sure the cover letter flows naturally and reads as a genuine, personalized letter rather than a template.
+
+Sender's Professional Background:
+${PERSONAL_PROFILE}
+
+Cover Letter Template:
+${template}
+
+Job Description:
+${jd}
+
+Output requirements:
+- Return ONLY the complete, personalized cover letter text.
+- Do not include any code fences, markdown formatting, or commentary.
+- The output should be ready to copy-paste into a document.
+- Maintain proper spacing and paragraph structure.`;
 
 const callGemini = async (prompt: string) => {
   try {
@@ -168,6 +197,24 @@ export const optimizeEmail = async (payload: EmailOptimizeRequestPayload): Promi
     return parseEmailOptimization(raw);
   } catch (error) {
     console.error("[gemini] email API call failed", error);
+    if (error instanceof GeminiApiError) {
+      throw error;
+    }
+    throw new GeminiApiError(error instanceof Error ? error.message : "Gemini API call failed");
+  }
+};
+
+export const optimizeCoverLetter = async (payload: CoverLetterOptimizeRequestPayload): Promise<CoverLetterOptimizeResponse> => {
+  if (!config.geminiKey) {
+    throw new GeminiMissingKeyError();
+  }
+
+  try {
+    const prompt = buildCoverLetterPrompt(payload);
+    const raw = await callGemini(prompt);
+    return { coverLetter: raw };
+  } catch (error) {
+    console.error("[gemini] cover letter API call failed", error);
     if (error instanceof GeminiApiError) {
       throw error;
     }

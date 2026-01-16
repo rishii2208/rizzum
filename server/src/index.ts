@@ -2,9 +2,11 @@ import cors, { type CorsOptions } from "cors";
 import express, { Request, Response } from "express";
 import { config } from "./config.js";
 import { scoreResume } from "./lib/atsScore.js";
-import { GeminiApiError, GeminiMissingKeyError, optimizeEmail, optimizeResume } from "./services/gemini.js";
+import { GeminiApiError, GeminiMissingKeyError, optimizeCoverLetter, optimizeEmail, optimizeResume } from "./services/gemini.js";
 import type {
   AtsScoreResponse,
+  CoverLetterOptimizeRequestPayload,
+  CoverLetterOptimizeResponse,
   EmailOptimizeRequestPayload,
   EmailOptimizeResponse,
   OptimizeRequestPayload,
@@ -62,6 +64,16 @@ const validateEmailPayload = (payload: EmailOptimizeRequestPayload) => {
   }
 };
 
+const validateCoverLetterPayload = (payload: CoverLetterOptimizeRequestPayload) => {
+  if (!payload.jd?.trim()) {
+    throw new Error("Job description is required");
+  }
+
+  if (!payload.template?.trim()) {
+    throw new Error("Cover letter template is required");
+  }
+};
+
 app.get("/health", (_req: Request, res: Response) => {
   res.json({ status: "ok" });
 });
@@ -93,6 +105,22 @@ app.post("/api/email-optimize", async (req: Request, res: Response) => {
   } catch (error) {
     console.error("/api/email-optimize error", error);
     const message = (error as Error).message || "Failed to optimize email";
+    const status = error instanceof GeminiMissingKeyError ? 503 : error instanceof GeminiApiError ? 502 : 500;
+    res.status(status).json({ message });
+  }
+});
+
+app.post("/api/cover-letter-optimize", async (req: Request, res: Response) => {
+  try {
+    const payload = req.body as CoverLetterOptimizeRequestPayload;
+    validateCoverLetterPayload(payload);
+
+    const optimized = await optimizeCoverLetter(payload);
+    const response: CoverLetterOptimizeResponse = optimized;
+    res.json(response);
+  } catch (error) {
+    console.error("/api/cover-letter-optimize error", error);
+    const message = (error as Error).message || "Failed to optimize cover letter";
     const status = error instanceof GeminiMissingKeyError ? 503 : error instanceof GeminiApiError ? 502 : 500;
     res.status(status).json({ message });
   }
