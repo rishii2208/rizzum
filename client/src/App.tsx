@@ -478,7 +478,7 @@ function ResumePage() {
                 onChange={(e) => setSelectedTemplate(e.target.value as ResumeTemplate)}
                 className="h-5 w-5 cursor-pointer accent-slate-900"
               />
-              <span className="font-semibold text-slate-900">Original Resume LaTeX (Local Jobs)</span>
+              <span className="font-semibold text-slate-900">Original Remote</span>
             </label>
             <label className="flex cursor-pointer items-center gap-3">
               <input
@@ -489,7 +489,7 @@ function ResumePage() {
                 onChange={(e) => setSelectedTemplate(e.target.value as ResumeTemplate)}
                 className="h-5 w-5 cursor-pointer accent-slate-900"
               />
-              <span className="font-semibold text-slate-900">Original Resume LaTeX (Remote Jobs)</span>
+              <span className="font-semibold text-slate-900">Original Local</span>
             </label>
           </div>
         </Panel>
