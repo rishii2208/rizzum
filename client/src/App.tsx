@@ -99,216 +99,130 @@ Full-stack engineer with production experience architecting scalable systems fro
 \end{document}
 `;
 
-const DEFAULT_RESUME_REMOTE = String.raw`\documentclass[letterpaper,11pt]{article}
-
-\usepackage{latexsym}
-\usepackage[empty]{fullpage}
-\usepackage{titlesec}
-\usepackage{marvosym}
-\usepackage[usenames,dvipsnames]{color}
-\usepackage{verbatim}
+const DEFAULT_RESUME_REMOTE = String.raw`\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
 \usepackage{enumitem}
-\usepackage[hidelinks]{hyperref}
-\usepackage{fancyhdr}
-\usepackage[english]{babel}
-\usepackage{tabularx}
+\usepackage{hyperref}
 \usepackage{fontawesome5}
-\usepackage{multicol}
-\setlength{\multicolsep}{-3.0pt}
-\setlength{\columnsep}{-1pt}
-\input{glyphtounicode}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
 
-\pagestyle{fancy}
-\fancyhf{}
-\fancyfoot{}
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0pt}
+% Page margins
+\geometry{left=1.5cm, right=1.5cm, top=1.5cm, bottom=1.5cm}
 
-\addtolength{\oddsidemargin}{-0.6in}
-\addtolength{\evensidemargin}{-0.5in}
-\addtolength{\textwidth}{1.19in}
-\addtolength{\topmargin}{-.9in}
-\addtolength{\textheight}{1.6in}
+% Define colors
+\definecolor{linkblue}{RGB}{0, 0, 238}
+\definecolor{lightblue}{RGB}{0, 79, 144}
+\definecolor{textgray}{RGB}{64, 64, 64}
 
-\urlstyle{same}
-
-\raggedbottom
-\raggedright
-\setlength{\tabcolsep}{0in}
-
-\titleformat{\section}{
-  \vspace{-6pt}\scshape\raggedright\large\bfseries
-}{}{0em}{}[\color{black}\titlerule \vspace{-6pt}]
-
-\pdfgentounicode=1
-
-\newcommand{\resumeItem}[1]{
-  \item\small{
-    {#1 \vspace{-3pt}}
-  }
+% Hyperlink setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=linkblue,
+    urlcolor=linkblue,
+    citecolor=linkblue
 }
 
-\newcommand{\resumeSubheading}[4]{
-  \vspace{-3pt}\item
-    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
-      \textbf{#1} & \textbf{\small #2} \\
-      \textit{\small#3} & \textit{\small #4} \\
-    \end{tabular*}\vspace{-8pt}
-}
+% Section formatting
+\titleformat{\section}
+    {\large\bfseries}
+    {}
+    {0em}
+    {}
+    [\titlerule]
 
-\newcommand{\resumeSubSubheading}[2]{
-    \item
-    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
-      \textit{\small#1} & \textit{\small #2} \\
-    \end{tabular*}\vspace{-7pt}
-}
+\titlespacing*{\section}{0pt}{10pt}{5pt}
 
-\newcommand{\resumeProjectHeading}[2]{
-    \item
-    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
-      \small#1 & \textbf{\small #2}\\
-    \end{tabular*}\vspace{-8pt}
-}
+% Remove page numbers
+\pagestyle{empty}
 
-\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+% Decrease word spacing
+\spaceskip=2.5pt plus 1pt minus 0.8pt
 
-\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
-\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+% Set description text size to 10pt
+\newcommand{\descriptionsize}{\fontsize{10}{12}\selectfont}
 
-\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
-\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}}
-\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-7pt}}
-
-\newcommand{\whitetext}[1]{{\color{white}#1}}
+% Custom list settings
+\setlist[itemize]{leftmargin=*, itemsep=2pt, topsep=2pt, parsep=0pt, before=\descriptionsize, label=$\circ$}
 
 \begin{document}
 
-% ----------HEADING----------
+% Header
 \begin{center}
-    {\Huge \scshape Rishi Raj Prajapati} \\ \vspace{1pt}
-    \small \raisebox{-0.1\height}\faPhone\ +91-8700168283 ~ 
-    \href{mailto:rishirajprajapati22@gmail.com}{\raisebox{-0.2\height}\faEnvelope\ \underline{rishirajprajapati22@gmail.com}} ~ 
-    \href{https://linkedin.com/in/rishi-raj-prajapati/}{\raisebox{-0.2\height}\faLinkedin\ \underline{linkedin.com/in/rishi-raj-prajapati}}  ~
-    \href{https://github.com/rishii2208}{\raisebox{-0.2\height}\faGithub\ \underline{github.com/rishii2208}}
-    \vspace{-10pt}
+    {\LARGE \textbf{Rishi Raj Prajapati}}\\[8pt]
+    \faMapMarker\ Bangalore, India \quad
+    \faEnvelope\ \href{mailto:rishirajprajapati22@gmail.com}{rishirajprajapati22@gmail.com} \quad
+    \faPhone\ 870-016-8283 \quad
+    \faLinkedin\ \href{https://linkedin.com/in/rishi-raj-prajapati/}{rishi-raj-prajapati} \quad
+    \faGithub\ \href{https://github.com/rishii2208}{rishii2208}
 \end{center}
 
-% -----------EDUCATION-----------
-\section{Education}
-  \resumeSubHeadingListStart
-    \resumeSubheading
-      {Bachelor of Technology}{2022 -- 2026}
-      {Delhi Technological University (DTU), Delhi}{}
-  \resumeSubHeadingListEnd
+% Education
+\section*{Education}
+\noindent\textbf{Delhi Technological University} \hfill \textit{Aug 2022 - May 2026}\\
+\textit{BTech, Majors in ECE, Minors in AI-ML}
 
-% -----------EXPERIENCE-----------
-\section{Experience}
-  \resumeSubHeadingListStart
+% Experience
+\section*{Experience}
+\noindent\textbf{Software Developer Intern} \hfill \textit{May 2025 -- Jul 2025}\\
+\textcolor{lightblue}{\textit{AOC}} \href{https://www.addressofchoice.com/}{\textcolor{lightblue}{\faExternalLink*}}
+\begin{itemize}
+    \item Implemented a modular, user-friendly, responsive interface using \textcolor{linkblue}{React.js} with reusable components for design
+    \item Improved a scalable, efficient back-end with \textcolor{linkblue}{Node.js}, ensuring high traffic handling and complex data processing
+    \item Managed data storage and retrieval using \href{https://www.mongodb.com/}{\textcolor{linkblue}{MongoDB}} by eliminating N+1 query problems
+    \item Worked on  a robust cloud infrastructure on \textcolor{linkblue}{AWS}, utilizing \textcolor{linkblue}{EC2} for scalable hosting and \textcolor{linkblue}{S3} for efficient media storage to ensure high availability
+\end{itemize}
 
-    \resumeSubheading
-      {Software Developer (Backend)}{June - August 2025}
-      {AOC | Noida, India}{}
-      \resumeItemListStart
-        \resumeItem{Designed, developed, and maintained scalable backend systems and RESTful APIs, focusing on secure data handling and robust integration patterns.}
-        \resumeItem{Implemented secure RESTful APIs for user authentication, management, and efficient data processing, contributing to end-to-end data flow.}
-        \resumeItem{Optimized data storage and retrieval using MongoDB, ensuring reliable data persistence for backend services.}
-        \resumeItem{Collaborated effectively with cross-functional teams to deliver integrated software solutions, focusing on system reliability and documentation.}
-      \resumeItemListEnd
+\noindent\textbf{Software Engineer Intern} \hfill \textit{Mar 2024 -- Aug 2024}\\
+\textcolor{lightblue}{\textit{Zebpay}} \href{https://www.linkedin.com/company/zebpay/}{\textcolor{lightblue}{\faExternalLink*}}
+\begin{itemize}
+    \item Designed and engineered a scalable \textcolor{linkblue}{REST APIs} for real-time data processing for crypto price analysis, achieving low-latency inference
+and high availability at scale, ensuring robust system performance.
+    \item Worked on a secure, robust, scalable backend with \textcolor{linkblue}{Node.js} and \textcolor{linkblue}{Express.js}, ensuring reliable performance and data handling
+    \item Integrated \href{https://www.mongodb.com/}{\textcolor{linkblue}{MongoDB}} for secure, efficient, scalable storage and retrieval of user registration details
+    \item Integrated \textcolor{linkblue}{Email.js} to automate company emails, capturing and processing user inputs from the front-end
+\end{itemize}
 
-    \resumeSubheading
-      {Software Developer Intern}{March 2024 - July 2024}
-      {Zebpay}{}
-      \resumeItemListStart
-        \resumeItem{Engineered highly scalable server-side REST APIs using Django Rest Framework, capable of handling high throughput (500+ requests/second) for critical data services.}
-        \resumeItem{Optimized PostgreSQL database schemas and query performance by 40\% through advanced indexing and data modeling techniques, crucial for data warehousing.}
-        \resumeItem{Automated deployments on AWS (EC2, S3, CloudFront) with CI/CD workflows, demonstrating expertise in infrastructure as code and efficient release management.}
-      \resumeItemListEnd
+% Projects
+\section*{Projects}
 
-  \resumeSubHeadingListEnd
+\noindent\textbf{Slander} \href{https://scholarsense-x98f.vercel.app/}{\textcolor{lightblue}{\faExternalLink*}}
+\begin{itemize}
+   \item Developed a real-time, anonymous networking platform for developers using \textcolor{linkblue}{Next.js} and \textcolor{linkblue}{WebRTC} to facilitate spontaneous peer-to-peer video connections and knowledge sharing. 
+   \item Secured the communication channels by implementing client-side rate limiting, automated content moderation algorithms, and \textcolor{linkblue}{JWT} based OAuth to ensure a safe and verified community environment. 
+   \item Engineered a low-latency signaling server with \textcolor{linkblue}{Socket.io} and \textcolor{linkblue}{TypeScript} to efficiently handle dynamic room allocation and instant user matching logic. 
+   \item Enhanced user engagement through a high-performance UI built with \textcolor{linkblue}{Tailwind CSS} and \textcolor{linkblue}{GSAP}, implementing complex scroll-triggered animations and interactive 3D visual effects.
+\end{itemize}
 
-% -----------PROJECTS-----------
-\section{Projects}
-    \resumeSubHeadingListStart
-    
-      \resumeProjectHeading
-          {\textbf{Slander – P2P Real-Time Video Chat Platform} $|$ \emph{NextJS, ExpressJS, Python, Django, PostgreSQL, OAuth 2.0} $|$ \href{http://slander.live/}{\underline{Link}}}{}
-          \resumeItemListStart
-            \resumeItem{Engineered a full-stack, real-time video chat platform with robust backend infrastructure and secure user interactions, emphasizing data security.}
-            \resumeItem{Developed responsive web UIs with Django and NextJS, implementing secure authentication flows and granular permission management using OAuth 2.0 principles.}
-            \resumeItem{Implemented real-time data streaming and robust backend services, ensuring seamless user experience and reliable data synchronization.}
-            \resumeItem{Designed and implemented secure user authentication and authorization mechanisms, including OAuth 2.0 flows for secure access and integration.}
-          \resumeItemListEnd
-          
-      \resumeProjectHeading
-          {\textbf{EasyAlgo Dynamic Website} $|$ \emph{CSS, HTML, Django, PostgreSQL, JavaScript, Python} $|$ \href{https://github.com}{\underline{GitHub}}}{May 2023 - June 2023}
-          \resumeItemListStart
-            \resumeItem{Developed an interactive learning platform, utilizing Django and PostgreSQL for robust data management, content delivery, and schema evolution.}
-            \resumeItem{Managed project lifecycle from planning to execution, coordinating content creation and feature integration to ensure timely delivery and stakeholder alignment.}
-            \resumeItem{Implemented data models and database schemas for tutorials and quizzes, facilitating efficient content updates and user progress tracking.}
-            \resumeItem{Integrated user engagement features (likes, comments) with a focus on capturing and analyzing interaction data, supporting compliance considerations and metadata management.}
-          \resumeItemListEnd
-          
-    \resumeSubHeadingListEnd
+\noindent\textbf{MindMapper}
+\begin{itemize}
+    \item Created and implemented a scalable \textcolor{linkblue}{TCP}-based \href{https://github.com/rishii2208/AIMindMapper}{\textcolor{linkblue}{HTTP}} server-client architecture supporting multiple users
+    \item Executed \textcolor{linkblue}{HTTP/1.1} features for file upload and download operations with efficient request handling mechanisms
+    \item Added versatile file support for \textcolor{linkblue}{TXT}, \textcolor{linkblue}{HTML}, \textcolor{linkblue}{PDF}, \textcolor{linkblue}{JPEG}, and \textcolor{linkblue}{C} formats enhancing user convenience and adaptability
+    \item Applied robust error handling and connection management to ensure reliable and efficient data transfer integrity
+\end{itemize}
 
-% -----------TECHNICAL SKILLS-----------
-\section{Technical Skills}
- \begin{itemize}[leftmargin=0.15in, label={}]
-    \small{\item{
-     \textbf{Languages:}{ Python (preferred), JavaScript, SQL, PowerShell, HTML} \\
-     \textbf{Frameworks \& Libraries:}{ Node.js, Express.js, Django, REST APIs, Microsoft Graph SDKs, Graph Explorer/Postman, Bootstrap} \\
-     \textbf{Tools \& Platforms:}{ Git, GitHub, Azure DevOps, VS Code, Linux CLI, Docker, AWS (EC2, S3, RDS), Azure Services (Functions, Logic Apps, Data Factory, Storage)} \\
-     \textbf{Databases:}{ PostgreSQL, MongoDB, SQL (data modeling, schema evolution, metadata, data lineage)} \\
-     \textbf{Core Concepts:}{ Data Structures \& Algorithms, Backend Development, API Development (Microsoft Graph API), System Design, M365 Data Extraction \& Integration, ETL Pipelines, OAuth 2.0, Azure AD App Registrations, Least-privilege Permissions, Conditional Access, Data Modeling, Schema Evolution, Metadata Management, Data Lineage, M365 Security & Compliance (Data Residency, Retention, MIP Sensitivity Labels, DLP, eDiscovery, Auditing), Throttling, Pagination, Delta Sync, Change Tracking, Idempotent Upserts, Webhooks/Subscriptions, CI/CD (GitHub Actions, Azure DevOps), Containerization (Docker), Infrastructure as Code (IaC), Performance Tuning (rate-limit strategy, parallelization, backoff)} \\
-     \textbf{Soft Skills:}{ Critical Thinking, Problem Solving, Excellent Communication, Collaboration, Documentation, Attention to Detail, Self-starter, Independent Operation}
-    }}
- \end{itemize}
 
-% -----------ACHIEVEMENTS-----------
-\section{Achievements and Position of Responsibilities}
-    \resumeSubHeadingListStart
-        \resumeProjectHeading
-          {\textbf{Main Coordinator, Roundtable DTU } $|$ Delhi}{Led and organized CTFs and cybersecurity workshops}
-        \resumeProjectHeading
-          {\textbf{CTF Event Coordinator,Invictus DTU }}{Led and organized hacking challenges at DTU's annual tech fest.}
-          
-    \resumeSubHeadingListEnd
+% Technologies
+\section*{Technologies}
+\noindent\textbf{Languages \& Frameworks:} C++, C, Python, SQL, JavaScript, HTML5, CSS, React.js, Node.js, Express.js, Tailwind CSS\\[3pt]
+\textbf{Databases \& Tools:} MongoDB, PostgreSQL, MySQL, Git/GitHub, Postman, VS Code, AWS(EC2,S3), Docker, Linux
+\textbf{Relevant Coursework:} Operating Systems, Computer Networks, Data Structures and Algorithms, Algorithm Analysis and Design, OOPS, DBMS, System Design
 
-\whitetext{
-### Job Description
-You will lead discovery, design secure app permissions, build reliable extract/transform/load pipelines, and deliver production-ready integrations with documentation and handoff. Seeking a hands-on SME who can scope, plan, and execute the end-to-end extraction of Microsoft 365 data via Microsoft Graph (and related APIs) and integrate it into a proprietary data warehousing system.
-Responsibilities
-• Discovery and Planning
-• Conduct stakeholder interviews and data inventory across M365 workloads (SharePoint Online, OneDrive, Teams, Exchange Online, Entra ID/Azure AD).
-• Define scope, data models, mapping, and success criteria; produce a project plan with milestones, risks, and estimates.
-• Architecture and Security
-• Design the extraction architecture using Microsoft Graph and related services (Graph SDKs, delta queries, subscriptions/webhooks, Graph Data Connect where appropriate).
-• Implement Azure AD app registrations, OAuth 2.0 flows, and least-privilege permissions (delegated vs. application) aligned with Conditional Access and tenant policies.
-• Data Extraction and Integration
-• Build robust pipelines to extract content and metadata (e.g., SharePoint lists/libraries, sites/drives/items, OneDrive, Teams channels/files, mailbox metadata, directory objects, audit/usage reports).
-• Handle throttling, pagination, retries, delta sync, change tracking, and idempotent upserts.
-• Transform and map data to target schemas; stage data (e.g., files/JSON/CSV/Parquet) and load into the proprietary data warehouse via APIs, connectors, or batch loads.
-• Compliance and Governance
-• Respect data residency, retention, MIP sensitivity labels, DLP, eDiscovery, and auditing requirements.
-• Navigate protected endpoints (e.g., Teams messages export) and approval processes; propose compliant alternatives when needed.
-Skills
-• 5+ years building integrations with Microsoft 365, including advanced use of Microsoft Graph API.
-• Proven delivery of data pipelines/ETL from M365 workloads:
-• SharePoint Online and OneDrive (sites, lists, libraries, drives/files, permissions).
-• Teams (channels, files; familiarity with protected chat/meeting export APIs and compliance boundaries).
-• Exchange Online (mailbox and message metadata, calendars) and directory objects in Entra ID (Azure AD). Strong expertise in:
-• OAuth 2.0, Azure AD app registrations, permissions consent, service principals, Conditional Access impacts.
-• Graph SDKs and REST (C#/.NET or Python preferred); PowerShell for automation; Graph Explorer/Postman.
-• Handling Graph constraints: throttling, batching, pagination, delta queries, webhooks/subscriptions.
-• Data modeling and transformation; SQL; schema evolution; metadata and lineage.
-• Experience integrating with custom/proprietary data warehouses (API-based or batch ingestion), including building connectors or staging layers.
-• Solid understanding of M365 security, compliance, and governance (retention, labels, DLP, eDiscovery/audit).
-• Self-starter who can operate independently in a part-time capacity; excellent communication and documentation.
-• Experience with Azure services (Functions, Logic Apps, Data Factory, Storage) for orchestration and staging.
-• Familiarity with Graph Data Connect, SharePoint REST/CSOM, Exchange Web Services deprecation nuances.
-• CI/CD (GitHub Actions/Azure DevOps), containerization, and IaC (Bicep/Terraform).
-• Background in performance tuning for large tenants (rate-limit strategy, parallelization, backoff).
-}
+
+
+% Achievements
+\section*{Achievements}
+\begin{itemize}
+    \item Worked with team/independently in over {\textcolor{linkblue}{50 projects}}, in domains like AI, web development, softwtare development, freelance work delivered successfully.  \href{https://github.com/rishii2208}{\textcolor{linkblue}{github}}
+    \item Won 6 national level hackathons from 2022 to 2025, and organised 3 24 hour offline national hackathons. 
+    \item Served as a Joint secretary at \href{https://www.linkedin.com/company/round-table-dtu/}{\textcolor{linkblue}{Roundtable}}, mentoring over 200 college students about sofwtare development. Worked as a coo-ordinator in ne of largest technical fest of northern India - \href{https://www.instagram.com/invictus_dtu/}{\textcolor{linkblue}{Invictus}}. 
+
+\end{itemize}
+
 \end{document}
 `;
 
